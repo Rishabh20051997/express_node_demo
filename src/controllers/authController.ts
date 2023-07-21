@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import User from '../model/User'
-import { TOKEN_EXPIRE_TIME } from '../common/constant';
+import { REFRESH_TOKEN_EXPIRE_TIME, STATUS_CODE, TOKEN_EXPIRE_TIME } from '../common/constant';
+import { log } from '../service/loggerService';
 
 // body {
 //     userName: '',
@@ -11,8 +12,8 @@ import { TOKEN_EXPIRE_TIME } from '../common/constant';
 export const handleLogin = async (req, res) => {
     const { userName, password } = req.body;
     if (!userName || !password) {
-        return res.status(400).json({
-            status: 200,
+        return res.status(STATUS_CODE.BAD_REQUEST).json({
+            status: STATUS_CODE.BAD_REQUEST,
             message: 'Username and password are required.' 
         });  
     } 
@@ -21,8 +22,8 @@ export const handleLogin = async (req, res) => {
 
     //Unauthorized
     if (!foundUser) {
-        return res.status(400).json({
-            status: 200,
+        return res.status(STATUS_CODE.BAD_REQUEST).json({
+            status: STATUS_CODE.BAD_REQUEST,
             message: 'User Name or Password is incorrect' 
         });   
     }
@@ -46,16 +47,16 @@ export const handleLogin = async (req, res) => {
         const refreshToken = jwt.sign(
             { "username": foundUser.username },
             process.env.REFRESH_TOKEN_SECRET,
-            { expiresIn: '1d' }
+            { expiresIn: REFRESH_TOKEN_EXPIRE_TIME }
         );
         // Saving refreshToken with current user
         foundUser.refreshToken = refreshToken;
         const result = await foundUser.save();
-        console.log(result);
-        console.log(roles);
+        log(result);
+        log(roles);
 
         // Send authorization roles and access token to user
-        res.json({ user: {
+        res.status(STATUS_CODE.SUCCESS).json({ user: {
             userId: foundUser._id,
             userName,
             roles,
@@ -66,8 +67,8 @@ export const handleLogin = async (req, res) => {
 
     } else {
         //Unauthorized
-        res.status(400).json({
-            status: 200,
+        res.status(STATUS_CODE.BAD_REQUEST).json({
+            status: STATUS_CODE.BAD_REQUEST,
             message: 'User Name or Password is incorrect' 
         });   
 

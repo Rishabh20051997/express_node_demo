@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import User from '../model/User'
-import { TOKEN_EXPIRE_TIME } from '../common/constant';
+import { STATUS_CODE, TOKEN_EXPIRE_TIME } from '../common/constant';
 
 // TODO:  Add type of found user
 const deleteRefreshToken = (foundUser) => {
@@ -11,8 +11,8 @@ const deleteRefreshToken = (foundUser) => {
 export const handleRefreshToken = async (req, res) => {
     const refreshToken = req.body.refreshToken;
     if (!refreshToken) {
-        return res.status(400).json({
-            status: 440, // session expire code
+        return res.status(STATUS_CODE.LOGOUT).json({
+            status: STATUS_CODE.LOGOUT, // session expire code
             message: 'Log out'
         });
     }
@@ -21,8 +21,8 @@ export const handleRefreshToken = async (req, res) => {
     if (!foundUser) {
         //Forbidden 
         deleteRefreshToken(foundUser)
-        return res.status(403).json({
-            status: 440, // session expire code
+        return res.status(STATUS_CODE.LOGOUT).json({
+            status: STATUS_CODE.LOGOUT, // session expire code
             message: 'Log out'
         });
     }
@@ -35,8 +35,8 @@ export const handleRefreshToken = async (req, res) => {
             if (err || foundUser.username !== decoded.username) {
                 //Forbidden 
                 deleteRefreshToken(foundUser)
-                return res.status(403).json({
-                    status: 440, // session expire code
+                return res.status(STATUS_CODE.LOGOUT).json({
+                    status: STATUS_CODE.LOGOUT, // session expire code
                     message: 'Log out'
                 });
             }
@@ -53,7 +53,7 @@ export const handleRefreshToken = async (req, res) => {
                 { expiresIn: TOKEN_EXPIRE_TIME }
             );
 
-            res.status(200).json({
+            res.status(STATUS_CODE.SUCCESS).json({
                 user: {
                     userId: foundUser._id,
                     userName: foundUser.username,

@@ -6,14 +6,14 @@ import { getAllUsers, deleteUser, getUser } from '../../controllers/usersControl
 import { ROLES_LIST } from '../../config/roles_list'
 import { verifyRoles } from '../../middleware/verifyRoles'
 
-const router = Router();
+const userRouter = Router();
 
-router.route('/')
+userRouter.route('/')
     .get(verifyRoles(ROLES_LIST.Admin), getAllUsers)
     .delete(verifyRoles(ROLES_LIST.Admin), deleteUser);
 
-router.route('/:id')
+    userRouter.route('/:id')
     .get(verifyRoles(ROLES_LIST.Admin), getUser);
 
 
-export default router
+export default userRouter

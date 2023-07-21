@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { v4 as uuid } from "uuid";
 import fs, { promises as fsPromises } from "fs";
 import path from "path";
+import { log } from "../service/loggerService";
 
 
 export const logEvents = async (message, logName) => {
@@ -15,12 +16,12 @@ export const logEvents = async (message, logName) => {
 
         await fsPromises.appendFile(path.join(__dirname, '..', 'logs', logName), logItem);
     } catch (err) {
-        console.log(err);
+        log(err);
     }
 }
 
 export const logger = (req, res, next) => {
     logEvents(`${req.method}\t${req.headers.origin}\t${req.url}`, 'reqLog.txt');
-    console.log(`${req.method} ${req.path}`);
+    log(`${req.method} ${req.path}`);
     next();
 }

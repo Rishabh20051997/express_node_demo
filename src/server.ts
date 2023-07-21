@@ -16,13 +16,14 @@ import { corsOptions } from './config/corsOptions'
 import { connectDB } from './config/dbConn'
 
 import RootRoute from './routes/root'
-import RegisterRoute from './routes/register'
-import AuthRoute from './routes/auth'
-import RefreshRoute from './routes/refresh'
-import LogoutRoute from './routes/logout'
+import RegisterRoute from './routes/authorization/register'
+import AuthRoute from './routes/authorization/auth'
+import RefreshRoute from './routes/authorization/refresh'
+import LogoutRoute from './routes/authorization/logout'
 import EmployeeRoute from './routes/api/employees'
 import UserRoute from './routes/api/users'
 import TaskRoute from './routes/api/tasks'
+import { log } from './service/loggerService'
 
 
 const PORT = process.env.PORT || 3500;
@@ -80,6 +81,6 @@ app.all('*', (req, res) => {
 app.use(errorHandler);
 
 mongoose.connection.once('open', () => {
-    console.log('Connected to MongoDB');
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    log('Connected to MongoDB');
+    app.listen(PORT, () => log(`Server running on port ${PORT}`));
 });

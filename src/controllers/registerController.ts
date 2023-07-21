@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import User from '../model/User'
-import { USER_TYPES } from '../common/constant';
+import { STATUS_CODE, USER_TYPES } from '../common/constant';
+import { log } from '../service/loggerService';
 
 // body {
 //     userName: '',
@@ -11,8 +12,8 @@ import { USER_TYPES } from '../common/constant';
 export const handleNewUser = async (req, res) => {
     const { userName, password, userType } = req.body;
     if (!userName || !password) {
-        return res.status(400).json({
-            status: 200,
+        return res.status(STATUS_CODE.BAD_REQUEST).json({
+            status: STATUS_CODE.BAD_REQUEST,
             message: 'Username and password are required.'
         });
     }
@@ -22,8 +23,8 @@ export const handleNewUser = async (req, res) => {
 
     //Conflict
     if (duplicate) {
-        return res.status(409).json({
-            status: 200,
+        return res.status(STATUS_CODE.CONFLICTS).json({
+            status: STATUS_CODE.CONFLICTS,
             message: 'User Already Exists. Please Login to continue'
         });
     }
@@ -62,17 +63,16 @@ export const handleNewUser = async (req, res) => {
             "roles": userRoles
         });
 
-        console.log(result);
+        log(result);
 
-        res.status(201).json({ 
-            status: 200,
+        res.status(STATUS_CODE.CREATED).json({ 
+            status: STATUS_CODE.CREATED,
             message: `New user ${userName} created! Please Login to continue.` 
         });
     } catch (err) {
-        res.status(500).json({ message: err.message });
 
-        res.status(201).json({ 
-            status: 200,
+        res.status(STATUS_CODE.SERVER_ERROR).json({ 
+            status: STATUS_CODE.SERVER_ERROR,
             message: err.message
         });
     }

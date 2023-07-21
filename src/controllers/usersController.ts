@@ -1,10 +1,11 @@
+import { STATUS_CODE } from '../common/constant';
 import User from '../model/User'
 
 export const getAllUsers = async (_req, res) => {
     const users = await User.find();
-    if (!users) return res.status(204).json({ status: 200, message: 'No users found', data: [] });
+    if (!users) return res.status(STATUS_CODE.SUCCESS).json({ status: STATUS_CODE.NO_CONTENT, message: 'No users found', data: [] });
 
-    res.status(200).json({ status: 200, message: 'Success', data: users });
+    res.status(STATUS_CODE.SUCCESS).json({ status: STATUS_CODE.SUCCESS, message: 'Success', data: users });
 }
 
 export const deleteUser = async (req, res) => {
@@ -15,24 +16,24 @@ export const deleteUser = async (req, res) => {
     const user = await User.findOne({ _id: req.body.id }).exec();
 
     if (!user) {
-        return res.status(204).json({ status: 204, message: `User ID ${req.body.id} not found` });
+        return res.status(STATUS_CODE.SUCCESS).json({ status: STATUS_CODE.NO_CONTENT, message: `User ID ${req.body.id} not found` });
     }
 
     await user.deleteOne({ _id: req.body.id });
-    res.status(200).json({ status: 200, message: `Success` });
+    res.status(STATUS_CODE.SUCCESS).json({ status: STATUS_CODE.SUCCESS, message: `Success` });
 
 }
 
 export const getUser = async (req, res) => {
     if (!req?.params?.id) {
-        return res.status(400).json({ status: 400, "message": 'User ID required' });
+        return res.status(STATUS_CODE.BAD_REQUEST).json({ status: STATUS_CODE.BAD_REQUEST, "message": 'User ID required' });
     } 
 
     const user = await User.findOne({ _id: req.params.id }).exec();
 
     if (!user) {
-        return res.status(204).json({ status: 204, message: `User ID ${req.body.id} not found` });
+        return res.status(STATUS_CODE.SUCCESS).json({ status: STATUS_CODE.NO_CONTENT, message: `User ID ${req.body.id} not found` });
     }
 
-    res.status(200).json({ status: 200, message: `Success`, data: { user } });
+    res.status(STATUS_CODE.SUCCESS).json({ status: STATUS_CODE.SUCCESS, message: `Success`, data: { user } });
 }

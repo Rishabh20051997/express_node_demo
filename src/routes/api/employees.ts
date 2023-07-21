@@ -11,15 +11,15 @@ import {
     getEmployee}
      from '../../controllers/employeesController'
 
-const router = Router();
+const employeeRouter = Router();
 
-router.route('/')
+employeeRouter.route('/')
     .get(getAllEmployees)
     .post(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), createNewEmployee)
     .put(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), updateEmployee)
     .delete(verifyRoles(ROLES_LIST.Admin), deleteEmployee);
 
-router.route('/:id')
+    employeeRouter.route('/:id')
     .get(getEmployee);
 
-export default router
+export default employeeRouter

@@ -1,4 +1,6 @@
+import { STATUS_CODE } from '../common/constant';
 import User from '../model/User'
+import { log } from '../service/loggerService';
 
 
 export const handleLogout = async (req, res) => {
@@ -6,8 +8,8 @@ export const handleLogout = async (req, res) => {
 
     const refreshToken = req.body.refreshToken;
     if (!refreshToken) {
-        return res.status(400).json({
-            status: 204, // session expire code
+        return res.status(STATUS_CODE.LOGOUT).json({
+            status: STATUS_CODE.LOGOUT, // session expire code
             message: 'Token Missing'
         });
     }
@@ -16,8 +18,8 @@ export const handleLogout = async (req, res) => {
     const foundUser = await User.findOne({ refreshToken }).exec();
 
     if (!foundUser) {
-        return res.status(403).json({
-            status: 440, // session expire code
+        return res.status(STATUS_CODE.LOGOUT).json({
+            status: STATUS_CODE.LOGOUT, // session expire code
             message: 'Log out'
         });
 
@@ -26,7 +28,7 @@ export const handleLogout = async (req, res) => {
     // Delete refreshToken in db
     foundUser.refreshToken = '';
     const result = await foundUser.save();
-    console.log(result);
+    log(result);
 
-    return res.sendStatus(204)
+    return res.sendStatus(STATUS_CODE.NO_CONTENT)
 }
