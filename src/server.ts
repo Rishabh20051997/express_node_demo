@@ -22,6 +22,7 @@ import RefreshRoute from './routes/refresh'
 import LogoutRoute from './routes/logout'
 import EmployeeRoute from './routes/api/employees'
 import UserRoute from './routes/api/users'
+import TaskRoute from './routes/api/tasks'
 
 
 const PORT = process.env.PORT || 3500;
@@ -63,6 +64,7 @@ app.use('/logout', LogoutRoute);
 app.use(verifyJWT);
 app.use('/employees', EmployeeRoute);
 app.use('/users', UserRoute);
+app.use('/tasks', TaskRoute);
 
 app.all('*', (req, res) => {
     res.status(404);

@@ -1,13 +1,32 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import User from '../model/User'
+import { TOKEN_EXPIRE_TIME } from '../common/constant';
+
+// body {
+//     userName: '',
+//     password: ''
+// }
 
 export const handleLogin = async (req, res) => {
     const { userName, password } = req.body;
-    if (!userName || !password) return res.status(400).json({ 'message': 'Username and password are required.' });
+    if (!userName || !password) {
+        return res.status(400).json({
+            status: 200,
+            message: 'Username and password are required.' 
+        });  
+    } 
 
     const foundUser = await User.findOne({ username: userName }).exec();
-    if (!foundUser) return res.sendStatus(401); //Unauthorized 
+
+    //Unauthorized
+    if (!foundUser) {
+        return res.status(400).json({
+            status: 200,
+            message: 'User Name or Password is incorrect' 
+        });   
+    }
+
     // evaluate password 
     const match = await bcrypt.compare(password, foundUser.password);
     if (match) {
@@ -21,8 +40,9 @@ export const handleLogin = async (req, res) => {
                 }
             },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '2m' }
+            { expiresIn: TOKEN_EXPIRE_TIME }
         );
+
         const refreshToken = jwt.sign(
             { "username": foundUser.username },
             process.env.REFRESH_TOKEN_SECRET,
@@ -34,13 +54,22 @@ export const handleLogin = async (req, res) => {
         console.log(result);
         console.log(roles);
 
-        // Creates Secure Cookie with refresh token
-        res.cookie('jwt', refreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
-
         // Send authorization roles and access token to user
-        res.json({ roles, accessToken });
+        res.json({ user: {
+            userId: foundUser._id,
+            userName,
+            roles,
+        }, 
+        accessToken,
+        refreshToken
+    });
 
     } else {
-        res.sendStatus(401);
+        //Unauthorized
+        res.status(400).json({
+            status: 200,
+            message: 'User Name or Password is incorrect' 
+        });   
+
     }
 }

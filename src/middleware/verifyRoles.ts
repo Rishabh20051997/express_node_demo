@@ -1,9 +1,10 @@
 export const verifyRoles = (...allowedRoles) => {
     return (req, res, next) => {
-        if (!req?.roles) return res.sendStatus(401);
+        if (!req?.roles) return res.status(400)
+        .json({ status: 204, "message": 'Access Missing' });
         const rolesArray = [...allowedRoles];
         const result = req.roles.map(role => rolesArray.includes(role)).find(val => val === true);
-        if (!result) return res.sendStatus(401);
+        if (!result) return res.status(400).json({ status: 204, "message": 'Access Missing' });
         next();
     }
 }

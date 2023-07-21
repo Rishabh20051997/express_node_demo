@@ -1,17 +1,26 @@
 import User from '../model/User'
 
+
 export const handleLogout = async (req, res) => {
     // On client, also delete the accessToken
 
-    const cookies = req.cookies;
-    if (!cookies?.jwt) return res.sendStatus(204); //No content
-    const refreshToken = cookies.jwt;
+    const refreshToken = req.body.refreshToken;
+    if (!refreshToken) {
+        return res.status(400).json({
+            status: 204, // session expire code
+            message: 'Token Missing'
+        });
+    }
 
     // Is refreshToken in db?
     const foundUser = await User.findOne({ refreshToken }).exec();
+
     if (!foundUser) {
-        res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true });
-        return res.sendStatus(204);
+        return res.status(403).json({
+            status: 440, // session expire code
+            message: 'Log out'
+        });
+
     }
 
     // Delete refreshToken in db
@@ -19,6 +28,5 @@ export const handleLogout = async (req, res) => {
     const result = await foundUser.save();
     console.log(result);
 
-    res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true });
-    res.sendStatus(204);
+    return res.sendStatus(204)
 }

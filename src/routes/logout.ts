@@ -4,6 +4,6 @@ import { handleLogout } from '../controllers/logoutController'
 
 const router = Router();
 
-router.get('/', handleLogout);
+router.post('/', handleLogout);
 
 export default router
