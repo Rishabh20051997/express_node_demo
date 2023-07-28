@@ -8,36 +8,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleLogout = void 0;
-const constant_1 = require("../common/constant");
-const User_1 = __importDefault(require("../model/User"));
-const loggerService_1 = require("../service/loggerService");
+const _constant_1 = require("@constant");
+const strings_1 = require("@common/strings");
+const user_use_cases_1 = require("@use-cases/user-use-cases");
+const response_transmitter_1 = require("@services/response-transmitter");
+const { TOKEN_MISSING, NO_USER_FOUND } = strings_1.LOGOUT_STRINGS;
 const handleLogout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // On client, also delete the accessToken
     const refreshToken = req.body.refreshToken;
     if (!refreshToken) {
-        return res.status(constant_1.STATUS_CODE.LOGOUT).json({
-            status: constant_1.STATUS_CODE.LOGOUT,
-            message: 'Token Missing'
-        });
+        return (0, response_transmitter_1.sendLogoutRequestResponse)(res, { message: TOKEN_MISSING });
     }
     // Is refreshToken in db?
-    const foundUser = yield User_1.default.findOne({ refreshToken }).exec();
+    const foundUser = yield (0, user_use_cases_1.getUserByRefreshToken)(refreshToken);
     if (!foundUser) {
-        return res.status(constant_1.STATUS_CODE.LOGOUT).json({
-            status: constant_1.STATUS_CODE.LOGOUT,
-            message: 'Log out'
-        });
+        return (0, response_transmitter_1.sendLogoutRequestResponse)(res, { message: NO_USER_FOUND });
     }
     // Delete refreshToken in db
-    foundUser.refreshToken = '';
-    const result = yield foundUser.save();
-    (0, loggerService_1.log)(result);
-    return res.sendStatus(constant_1.STATUS_CODE.NO_CONTENT);
+    (0, user_use_cases_1.deleteUserRefreshToken)(foundUser);
+    // Logout Success
+    return (0, response_transmitter_1.sendPlainResponseCode)(res, { code: _constant_1.STATUS_CODE.NO_CONTENT });
 });
 exports.handleLogout = handleLogout;
 //# sourceMappingURL=logoutController.js.map

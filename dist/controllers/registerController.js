@@ -8,78 +8,43 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleNewUser = void 0;
-const bcrypt_1 = __importDefault(require("bcrypt"));
-const User_1 = __importDefault(require("../model/User"));
-const constant_1 = require("../common/constant");
-const loggerService_1 = require("../service/loggerService");
-// body {
-//     userName: '',
-//     password: '',
-//     userType: USER_TYPES
-// }
+const response_transmitter_1 = require("@services/response-transmitter");
+const strings_1 = require("@common/strings");
+const user_use_cases_1 = require("@use-cases/user-use-cases");
+const bcrypt_helper_1 = require("@helpers/bcrypt-helper");
+const user_type_roles_helpers_1 = require("@helpers/user-type-roles-helpers");
+const { INVALID_PARAMS, ALREADY_EXISTS } = strings_1.AUTHORIZATION_STRINGS;
 const handleNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userName, password, userType } = req.body;
     if (!userName || !password) {
-        return res.status(constant_1.STATUS_CODE.BAD_REQUEST).json({
-            status: constant_1.STATUS_CODE.BAD_REQUEST,
-            message: 'Username and password are required.'
+        return (0, response_transmitter_1.sendBadRequestResponse)(res, {
+            message: INVALID_PARAMS
         });
     }
     // check for duplicate usernames in the db
-    const duplicate = yield User_1.default.findOne({ username: userName }).exec();
+    const duplicate = yield (0, user_use_cases_1.getUserByUserName)(userName);
     //Conflict
     if (duplicate) {
-        return res.status(constant_1.STATUS_CODE.CONFLICTS).json({
-            status: constant_1.STATUS_CODE.CONFLICTS,
-            message: 'User Already Exists. Please Login to continue'
-        });
+        return (0, response_transmitter_1.sendConflictsRequestResponse)(res, { message: ALREADY_EXISTS });
     }
     try {
         //encrypt the password
-        const hashedPwd = yield bcrypt_1.default.hash(password, 10);
-        let userRoles;
-        if (userType === constant_1.USER_TYPES.ADMIN) {
-            userRoles = {
-                "Admin": 5150,
-                "Editor": 1984,
-                "User": 2001
-            };
-        }
-        else if (userType === constant_1.USER_TYPES.EDITOR) {
-            userRoles = {
-                "Editor": 1984,
-                "User": 2001
-            };
-        }
-        else {
-            // 'User'
-            userRoles = {
-                "Editor": 1984,
-                "User": 2001
-            };
-        }
+        const hashedPwd = (0, bcrypt_helper_1.generateEncryptPassword)(password);
+        const userRoles = (0, user_type_roles_helpers_1.getRolesOnBasisOfUserType)(userType);
         //create and store the new user
-        const result = yield User_1.default.create({
-            "username": userName,
-            "password": hashedPwd,
-            "roles": userRoles
+        yield (0, user_use_cases_1.createNewUserEntry)({
+            userName,
+            hashedPwd,
+            userRoles
         });
-        (0, loggerService_1.log)(result);
-        res.status(constant_1.STATUS_CODE.CREATED).json({
-            status: constant_1.STATUS_CODE.CREATED,
+        (0, response_transmitter_1.sendNewItemCreatedRequestResponse)(res, {
             message: `New user ${userName} created! Please Login to continue.`
         });
     }
     catch (err) {
-        res.status(constant_1.STATUS_CODE.SERVER_ERROR).json({
-            status: constant_1.STATUS_CODE.SERVER_ERROR,
-            message: err.message
-        });
+        (0, response_transmitter_1.sendServerErrorRequestResponse)(res, { message: err.message });
     }
 });
 exports.handleNewUser = handleNewUser;

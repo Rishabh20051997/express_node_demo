@@ -1,1 +1,1 @@
-{"version":3,"file":"register.js","sourceRoot":"","sources":["../../../src/routes/authorization/register.ts"],"names":[],"mappings":";;AAEA,qCAAgC;AAEhC,6EAAoE;AAEpE,MAAM,cAAc,GAAG,IAAA,gBAAM,GAAE,CAAC;AAEhC,cAAc,CAAC,IAAI,CAAC,GAAG,EAAE,kCAAa,CAAC,CAAC;AAExC,kBAAe,cAAc,CAAA"}
+{"version":3,"file":"register.js","sourceRoot":"","sources":["../../../src/routes/authorization/register.ts"],"names":[],"mappings":";;AAEA,qCAAgC;AAEhC,oFAA0E;AAE1E,MAAM,cAAc,GAAG,IAAA,gBAAM,GAAE,CAAC;AAEhC,cAAc,CAAC,IAAI,CAAC,GAAG,EAAE,mCAAa,CAAC,CAAC;AAExC,kBAAe,cAAc,CAAA"}

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const authController_1 = require("../../controllers/authController");
+const auth_controller_1 = require("../../controllers/auth/auth-controller");
 const authRouter = (0, express_1.Router)();
-authRouter.post('/', authController_1.handleLogin);
+authRouter.post('/', auth_controller_1.handleLogin);
 exports.default = authRouter;
 //# sourceMappingURL=auth.js.map

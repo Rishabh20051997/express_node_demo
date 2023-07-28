@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import 'module-alias/register';
 import express from 'express'
 import path from 'path'
 import cors from 'cors'
@@ -6,24 +7,23 @@ import cookieParser from 'cookie-parser'
 import mongoose from 'mongoose'
 
 
-import { logger } from './middleware/logEvents'
-import { errorHandler } from './middleware/errorHandler'
-import { verifyJWT } from './middleware/verifyJWT'
-import { credentials } from './middleware/credentials'
+import { logger } from '@middleware/log-events'
+import { errorHandler } from '@middleware/error-handler'
+import { verifyJWT } from '@middleware/verify-JWT'
+import { credentials } from '@middleware/credentials'
 
 
-import { corsOptions } from './config/corsOptions'
-import { connectDB } from './config/dbConn'
+import { corsOptions } from '@config/cors-options'
 
-import RootRoute from './routes/root'
-import RegisterRoute from './routes/authorization/register'
-import AuthRoute from './routes/authorization/auth'
-import RefreshRoute from './routes/authorization/refresh'
-import LogoutRoute from './routes/authorization/logout'
-import EmployeeRoute from './routes/api/employees'
-import UserRoute from './routes/api/users'
-import TaskRoute from './routes/api/tasks'
-import { log } from './service/loggerService'
+import RootRoute from '@routes/root'
+import RegisterRoute from '@routes/authorization/register-route'
+import AuthRoute from '@routes/authorization/auth-route'
+import RefreshRoute from '@routes/authorization/refresh-route'
+import LogoutRoute from '@routes/authorization/logout-route'
+import EmployeeRoute from '@routes/api/employees-route'
+import UserRoute from '@routes/api/users-route'
+import TaskRoute from '@routes/api/tasks-route'
+import { log } from '@services/logger-service'
 
 
 const PORT = process.env.PORT || 3500;
@@ -31,7 +31,7 @@ const PORT = process.env.PORT || 3500;
 const app = express();
 
 // Connect to MongoDB
-connectDB();
+mongoose.connect(process.env.DATABASE_URI);
 
 // custom middleware logger
 app.use(logger);

@@ -40,7 +40,7 @@ const date_fns_1 = require("date-fns");
 const uuid_1 = require("uuid");
 const fs_1 = __importStar(require("fs"));
 const path_1 = __importDefault(require("path"));
-const loggerService_1 = require("../service/loggerService");
+const loggerService_1 = require("../services/loggerService");
 const logEvents = (message, logName) => __awaiter(void 0, void 0, void 0, function* () {
     const dateTime = `${(0, date_fns_1.format)(new Date(), 'yyyyMMdd\tHH:mm:ss')}`;
     const logItem = `${dateTime}\t${(0, uuid_1.v4)()}\t${message}\n`;

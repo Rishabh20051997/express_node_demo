@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getEmployee = exports.deleteEmployee = exports.updateEmployee = exports.createNewEmployee = exports.getAllEmployees = void 0;
 const constant_1 = require("../common/constant");
 const Employee_1 = __importDefault(require("../model/Employee"));
-const loggerService_1 = require("../service/loggerService");
+const loggerService_1 = require("../services/loggerService");
 const getAllEmployees = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const employees = yield Employee_1.default.find();
     if (!employees) {

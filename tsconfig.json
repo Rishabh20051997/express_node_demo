@@ -5,7 +5,24 @@
       "target": "es6",
       "moduleResolution": "node",
       "sourceMap": true,
-      "outDir": "dist"
+      "outDir": "dist",
+      "baseUrl": "./src",
+      "paths": {   
+        "@constant": ["common/constant"],
+        "@common/*": ["common/*"],
+        "@config/*": ["config/*"],
+        "@controllers/*": ["controllers/*"],
+        "@helpers/*": ["helpers/*"],
+        "@log/*": ["logs/*"],
+        "@middleware/*": ["middleware/*"],
+        "@model/*": ["model/*"],
+        "@public/*": ["public/*"],
+        "@routes/*": ["routes/*"],
+        "@services/*": ["services/*"],
+        "@use-cases/*": ["use-cases/*"],
+        "@views/*": ["views/*"]
+      }
     },
-    "lib": ["es2015"]
+    "lib": ["es2015"],
+    "include": ["src"]
   }
