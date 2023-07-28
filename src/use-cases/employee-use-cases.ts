@@ -1,6 +1,6 @@
 import Employee from "@model/employee-model";
 
-const getAllEmployeesList = async () => {
+const getAllEmployeesList = async (): Promise<IEmployeeModelDocType[]> => {
     const list = await Employee.find();
     return list || []
 }
@@ -8,22 +8,25 @@ const getAllEmployeesList = async () => {
 const createNewEmployeeEntry = async ({
     firstName,
     lastName
-}) => {
-    const result = await Employee.create({
+}: {
+    firstName: string
+    lastName: string   
+}): Promise<IEmployeeModelDocType> => {
+    const result: IEmployeeModelDocType  = await Employee.create({
         firstname: firstName,
         lastname: lastName
     })
     return result
 }
 
-const findEmployeeById = async (id) => {
+const findEmployeeById = async (id: string): Promise<IEmployeeModelDocType> => {
     return await Employee.findOne({ _id: id }).exec();
 }
 
-const updateEmployeeData = async (employeeInstance, {
-    firstName,
-    lastName
-}) => {
+const updateEmployeeData = async (employeeInstance: IEmployeeModelDocType, {
+    firstName = '',
+    lastName = ''
+}): Promise<IEmployeeModelDocType> => {
     if (firstName) {
         employeeInstance.firstname = lastName
     }
@@ -33,8 +36,7 @@ const updateEmployeeData = async (employeeInstance, {
     return await employeeInstance.save();
 }
 
-const deleteEmployeeEntry = async (employeeInstance) => {
-
+const deleteEmployeeEntry = async (employeeInstance: IEmployeeModelDocType): Promise<IEmployeeModelDocType> => {
     return await employeeInstance.deleteOne();
 }
 

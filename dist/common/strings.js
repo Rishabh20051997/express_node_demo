@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EMPLOYEE_LIST_RESPONSE_LABEL = exports.TASK_LIST_RESPONSE_LABEL = exports.SOMETHING_WENT_WRONG_MESSAGE = exports.LOGOUT_STRINGS = exports.CORS_ERROR_MESSAGE = exports.AUTHORIZATION_STRINGS = exports.USER_LIST_RESPONSE_LABEL = exports.SUCCESS_RESPONSE_MESSAGE = void 0;
+exports.ACCESS_MISSING = exports.EMPLOYEE_LIST_RESPONSE_LABEL = exports.TASK_LIST_RESPONSE_LABEL = exports.SOMETHING_WENT_WRONG_MESSAGE = exports.LOGOUT_STRINGS = exports.CORS_ERROR_MESSAGE = exports.AUTHORIZATION_STRINGS = exports.USER_LIST_RESPONSE_LABEL = exports.SUCCESS_RESPONSE_MESSAGE = void 0;
 const AUTHORIZATION_STRINGS = {
     INCORRECT_CREDENTIALS: 'User Name or Password is incorrect',
     INVALID_PARAMS: 'Username and password are required.',
@@ -36,4 +36,6 @@ const SOMETHING_WENT_WRONG_MESSAGE = 'Something Went Wrong';
 exports.SOMETHING_WENT_WRONG_MESSAGE = SOMETHING_WENT_WRONG_MESSAGE;
 const CORS_ERROR_MESSAGE = 'Not allowed by CORS';
 exports.CORS_ERROR_MESSAGE = CORS_ERROR_MESSAGE;
+const ACCESS_MISSING = 'Access Missing';
+exports.ACCESS_MISSING = ACCESS_MISSING;
 //# sourceMappingURL=strings.js.map

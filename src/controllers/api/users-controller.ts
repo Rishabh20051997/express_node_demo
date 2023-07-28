@@ -14,7 +14,7 @@ import {
 } from '@common/strings';
 
 
-export const getAllUsers = async (_req, res) => {
+export const getAllUsers = async (_req: IRequest, res: IResponse) => {
     const users = await getAllUsersList()
 
 
@@ -31,8 +31,8 @@ export const getAllUsers = async (_req, res) => {
     })
 }
 
-export const deleteUser = async (req, res) => {
-    const userId = req?.body?.id
+export const deleteUser = async (req: IRequest, res: IResponse) => {
+    const userId: string | undefined = req?.body?.id
     if (!userId) {
         sendBadRequestResponse(res, {
             message: USER_LIST_RESPONSE_LABEL.ID_REQUIRED
@@ -55,8 +55,8 @@ export const deleteUser = async (req, res) => {
     })
 }
 
-export const getUser = async (req, res) => {
-    const userId = req?.body?.id
+export const getUser = async (req: IRequest, res: IResponse) => {
+    const userId: string | undefined = req?.body?.id
     if (!userId) {
         return sendBadRequestResponse(res, {
             message: USER_LIST_RESPONSE_LABEL.ID_REQUIRED

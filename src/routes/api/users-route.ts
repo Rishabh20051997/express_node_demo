@@ -12,7 +12,7 @@ userRouter.route('/')
     .get(verifyRoles(ROLES_LIST.Admin), getAllUsers)
     .delete(verifyRoles(ROLES_LIST.Admin), deleteUser);
 
-    userRouter.route('/:id')
+userRouter.route('/:id')
     .get(verifyRoles(ROLES_LIST.Admin), getUser);
 
 

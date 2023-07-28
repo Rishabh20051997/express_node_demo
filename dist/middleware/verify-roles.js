@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyRoles = void 0;
-const _constant_1 = require("@constant");
+const response_transmitter_1 = require("@services/response-transmitter");
 const verifyRoles = (...allowedRoles) => {
     return (req, res, next) => {
         if (!(req === null || req === void 0 ? void 0 : req.roles)) {
-            return res.status(_constant_1.STATUS_CODE.ACCESS_DENIED).json({ status: _constant_1.STATUS_CODE.ACCESS_DENIED, "message": 'Access Missing' });
+            return (0, response_transmitter_1.sendAccessDeniedRequestResponse)(res);
         }
         const rolesArray = [...allowedRoles];
         const result = req.roles.map(role => rolesArray.includes(role)).find(val => val === true);
         if (!result) {
-            return res.status(_constant_1.STATUS_CODE.ACCESS_DENIED).json({ status: _constant_1.STATUS_CODE.ACCESS_DENIED, "message": 'Access Missing' });
+            return (0, response_transmitter_1.sendAccessDeniedRequestResponse)(res);
         }
         next();
     };

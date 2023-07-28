@@ -9,9 +9,9 @@ const {
 } = LOGOUT_STRINGS
 
 
-export const handleLogout = async (req, res) => {
+export const handleLogout = async (req: IRequest, res: IResponse) => {
 
-    const refreshToken = req.body.refreshToken;
+    const refreshToken: string | undefined = req.body.refreshToken;
     if (!refreshToken) {
         return sendLogoutRequestResponse(res, { message: TOKEN_MISSING })
     }

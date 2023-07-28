@@ -14,6 +14,7 @@ const _constant_1 = require("@constant");
 const response_transmitter_1 = require("@services/response-transmitter");
 const token_handlers_1 = require("@helpers/token-handlers");
 const verifyJWT = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     const authHeader = req.headers.authorization || req.headers.Authorization;
     if (!(authHeader === null || authHeader === void 0 ? void 0 : authHeader.startsWith('Bearer '))) {
         return (0, response_transmitter_1.sendPlainResponseCode)(res, {
@@ -26,8 +27,8 @@ const verifyJWT = (req, res, next) => __awaiter(void 0, void 0, void 0, function
         return (0, response_transmitter_1.sendPlainResponseCode)(res, {
             code: _constant_1.STATUS_CODE.UN_AUTHORIZED
         }); //invalid token
-    req.user = decoded.UserInfo.username;
-    req.roles = decoded.UserInfo.roles;
+    req.user = (_a = decoded === null || decoded === void 0 ? void 0 : decoded.UserInfo) === null || _a === void 0 ? void 0 : _a.username;
+    req.roles = (_b = decoded === null || decoded === void 0 ? void 0 : decoded.UserInfo) === null || _b === void 0 ? void 0 : _b.roles;
     next();
 });
 exports.verifyJWT = verifyJWT;

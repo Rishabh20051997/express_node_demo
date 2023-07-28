@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
-const taskSchema = new Schema({
+const taskSchema = new Schema<ITaskSchema>({
     task: {
         type: String,
         required: true
     },
 });
 
-export default mongoose.model('Task', taskSchema);
+const taskModelSchema = mongoose.model('Task', taskSchema);
+export default taskModelSchema

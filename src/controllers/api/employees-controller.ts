@@ -16,7 +16,7 @@ import {
     sendSuccessRequestResponse
 } from '@services/response-transmitter';
 
-export const getAllEmployees = async (req, res) => {
+export const getAllEmployees = async (_req: IRequest, res: IResponse) => {
     const employees = await getAllEmployeesList()
     if (!employees.length) {
         return sendSuccessRequestForNoDataResponse(res, {
@@ -31,9 +31,9 @@ export const getAllEmployees = async (req, res) => {
     })
 }
 
-export const createNewEmployee = async (req, res) => {
-    const firstName = req?.body?.firstname
-    const lastName = req?.body?.lastname
+export const createNewEmployee = async (req: IRequest, res: IResponse) => {
+    const firstName: string | undefined = req?.body?.firstname
+    const lastName: string | undefined = req?.body?.lastname
 
     if (!firstName || !lastName) {
         return sendBadRequestResponse(res, {
@@ -53,15 +53,15 @@ export const createNewEmployee = async (req, res) => {
         })
     } catch (err) {
         return sendBadRequestResponse(res, {
-            message: err
+            message: err?.toString()
         })
     }
 }
 
-export const updateEmployee = async (req, res) => {
-    const id = req?.body?.id
-    const firstName = req.body?.firstname
-    const lastName = req.body?.lastname
+export const updateEmployee = async (req: IRequest, res: IResponse) => {
+    const id: string | undefined = req?.body?.id
+    const firstName: string | undefined = req.body?.firstname
+    const lastName: string | undefined = req.body?.lastname
 
     if (!id) {
         return sendBadRequestResponse(res, {
@@ -89,8 +89,8 @@ export const updateEmployee = async (req, res) => {
     })
 }
 
-export const deleteEmployee = async (req, res) => {
-    const id = req?.body?.id
+export const deleteEmployee = async (req: IRequest, res: IResponse) => {
+    const id: string | undefined = req?.body?.id
     if (!id) {
         return sendBadRequestResponse(res, {
             message: EMPLOYEE_LIST_RESPONSE_LABEL.ID_MISSING
@@ -98,7 +98,6 @@ export const deleteEmployee = async (req, res) => {
     }
 
     const employee = await findEmployeeById(id)
-
 
     if (!employee) {
         return sendSuccessRequestForNoDataResponse(res, {
@@ -114,8 +113,8 @@ export const deleteEmployee = async (req, res) => {
     })
 }
 
-export const getEmployee = async (req, res) => {
-    const id = req?.body?.id
+export const getEmployee = async (req: IRequest, res: IResponse) => {
+    const id: string | undefined = req?.body?.id
     if (!id) {
         return sendBadRequestResponse(res, {
             message: EMPLOYEE_LIST_RESPONSE_LABEL.ID_MISSING

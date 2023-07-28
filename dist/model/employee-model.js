@@ -15,5 +15,7 @@ const employeeSchema = new Schema({
         required: true
     }
 });
-exports.default = mongoose_1.default.model('Employee', employeeSchema);
+const employeeModelSchema = mongoose_1.default.model('Employee', employeeSchema);
+// type employeeModelType = InferSchemaType<typeof employeeSchema>;
+exports.default = employeeModelSchema;
 //# sourceMappingURL=employee-model.js.map

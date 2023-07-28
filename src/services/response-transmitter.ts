@@ -1,6 +1,7 @@
+import { ACCESS_MISSING } from "@common/strings";
 import { STATUS_CODE } from "@constant";
 
-const sendBadRequestResponse = (res, {
+const sendBadRequestResponse = (res: IResponse, {
     message = ''
 }) => {
     res.status(STATUS_CODE.BAD_REQUEST).json({
@@ -9,7 +10,7 @@ const sendBadRequestResponse = (res, {
     });
 }
 
-const sendConflictsRequestResponse = (res, {
+const sendConflictsRequestResponse = (res: IResponse, {
     message = ''
 }) => {
     res.status(STATUS_CODE.CONFLICTS).json({
@@ -18,7 +19,7 @@ const sendConflictsRequestResponse = (res, {
     });
 }
 
-const sendNewItemCreatedRequestResponse = (res, {
+const sendNewItemCreatedRequestResponse = (res: IResponse, {
     message = '',
     data
 }) => {
@@ -29,7 +30,7 @@ const sendNewItemCreatedRequestResponse = (res, {
     });
 }
 
-const sendSuccessRequestResponse = (res, {
+const sendSuccessRequestResponse = (res: IResponse, {
     message = '',
     data
 }) => {
@@ -40,7 +41,7 @@ const sendSuccessRequestResponse = (res, {
     });
 }
 
-const sendSuccessRequestForNoDataResponse = (res, {
+const sendSuccessRequestForNoDataResponse = (res: IResponse, {
     message = '',
     data
 }) => {
@@ -51,7 +52,7 @@ const sendSuccessRequestForNoDataResponse = (res, {
     });
 }
 
-const sendServerErrorRequestResponse = (res, {
+const sendServerErrorRequestResponse = (res: IResponse, {
     message = ''
 }) => {
     res.status(STATUS_CODE.SERVER_ERROR).json({
@@ -60,10 +61,29 @@ const sendServerErrorRequestResponse = (res, {
     });
 }
 
-const sendLoginRequestResponse = (res, {
+const sendAccessDeniedRequestResponse = (res: IResponse) => {
+    res.status(STATUS_CODE.ACCESS_DENIED).json({
+        status: STATUS_CODE.ACCESS_DENIED,
+        message: ACCESS_MISSING
+    });
+}
+
+const sendPlainResponseCode = (res: IResponse, {
+    code
+} : {
+    code: number
+}) => {
+    res.sendStatus(code)
+}
+
+const sendLoginRequestResponse = (res: IResponse, {
     user,
     accessToken,
     refreshToken
+}: {
+    user: IUserResponseObject
+    accessToken: string
+    refreshToken:  string
 }) => {
     res.status(STATUS_CODE.SUCCESS).json({
         user,
@@ -72,7 +92,7 @@ const sendLoginRequestResponse = (res, {
     });
 }
 
-const sendLogoutRequestResponse = (res, {
+const sendLogoutRequestResponse = (res: IResponse, {
     message
 }) => {
     res.status(STATUS_CODE.LOGOUT).json({
@@ -81,11 +101,6 @@ const sendLogoutRequestResponse = (res, {
     });
 }
 
-const sendPlainResponseCode = (res, {
-    code
-}) => {
-    res.sendStatus(code)
-}
 
 
 export {
@@ -97,5 +112,6 @@ export {
     sendNewItemCreatedRequestResponse,
     sendServerErrorRequestResponse,
     sendSuccessRequestResponse,
-    sendSuccessRequestForNoDataResponse
+    sendSuccessRequestForNoDataResponse,
+    sendAccessDeniedRequestResponse
 }

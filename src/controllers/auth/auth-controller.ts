@@ -10,8 +10,11 @@ const {
 } = AUTHORIZATION_STRINGS
 
 
-export const handleLogin = async (req, res) => {
-    const { userName, password } = req.body;
+export const handleLogin = async (req: IRequest, res: IResponse) => {
+    const { userName, password } : {
+        userName: string | undefined
+        password: string | undefined
+    } = req.body;
 
     // validation params
     if (!userName || !password) {

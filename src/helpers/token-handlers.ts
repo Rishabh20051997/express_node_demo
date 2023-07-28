@@ -4,7 +4,7 @@ import { REFRESH_TOKEN_EXPIRE_TIME, TOKEN_EXPIRE_TIME } from '@constant';
 const generateAccessToken = ({
     username,
     roles 
-}) => {
+}: IJwtAccessTokenSignInObject['UserInfo']): string => {
     return jwt.sign(
         {
             "UserInfo": {
@@ -17,7 +17,7 @@ const generateAccessToken = ({
     );
 }
 
-const generateRefreshToken = ({ username }) => {
+const generateRefreshToken = ({ username }: IJwtRefreshTokenSignInObject): string => {
     return jwt.sign(
         { "username": username },
         process.env.REFRESH_TOKEN_SECRET,
@@ -26,11 +26,10 @@ const generateRefreshToken = ({ username }) => {
 }
 
 
-const verifyJwtRefreshToken = async (refreshToken) => {
+const verifyJwtRefreshToken = async (refreshToken)=> {
     const result = {
         err: '',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        decoded : {} as any
+        decoded : {} as IJwtRefreshTokenSignInObject
     } 
 
     jwt.verify(
@@ -45,11 +44,10 @@ const verifyJwtRefreshToken = async (refreshToken) => {
     return result
 }
 
-const verifyJwtAccessToken = async (token) => {
+const verifyJwtAccessToken = async (token)  => {
     const result = {
         err: '',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        decoded : {} as any
+        decoded : {} as IJwtAccessTokenSignInObject
     } 
 
     jwt.verify(

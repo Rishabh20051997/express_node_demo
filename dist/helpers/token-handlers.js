@@ -31,7 +31,6 @@ exports.generateRefreshToken = generateRefreshToken;
 const verifyJwtRefreshToken = (refreshToken) => __awaiter(void 0, void 0, void 0, function* () {
     const result = {
         err: '',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         decoded: {}
     };
     jsonwebtoken_1.default.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
@@ -44,7 +43,6 @@ exports.verifyJwtRefreshToken = verifyJwtRefreshToken;
 const verifyJwtAccessToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
     const result = {
         err: '',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         decoded: {}
     };
     jsonwebtoken_1.default.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {

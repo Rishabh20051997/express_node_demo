@@ -1,11 +1,12 @@
+
 import Task from "@model/task-model";
 
-const getAllTasksList = async () => {
+const getAllTasksList = async (): Promise<ITaskModelDocType[]> => {
     const list = await Task.find();
     return list || []
 }
 
-const createNewTaskEntry = async (task) => {
+const createNewTaskEntry = async (task: string): Promise<ITaskModelDocType> => {
     const result = await Task.create({
         task
     })

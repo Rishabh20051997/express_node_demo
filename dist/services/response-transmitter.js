@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendSuccessRequestForNoDataResponse = exports.sendSuccessRequestResponse = exports.sendServerErrorRequestResponse = exports.sendNewItemCreatedRequestResponse = exports.sendPlainResponseCode = exports.sendLogoutRequestResponse = exports.sendLoginRequestResponse = exports.sendConflictsRequestResponse = exports.sendBadRequestResponse = void 0;
+exports.sendAccessDeniedRequestResponse = exports.sendSuccessRequestForNoDataResponse = exports.sendSuccessRequestResponse = exports.sendServerErrorRequestResponse = exports.sendNewItemCreatedRequestResponse = exports.sendPlainResponseCode = exports.sendLogoutRequestResponse = exports.sendLoginRequestResponse = exports.sendConflictsRequestResponse = exports.sendBadRequestResponse = void 0;
+const strings_1 = require("@common/strings");
 const _constant_1 = require("@constant");
 const sendBadRequestResponse = (res, { message = '' }) => {
     res.status(_constant_1.STATUS_CODE.BAD_REQUEST).json({
@@ -47,6 +48,17 @@ const sendServerErrorRequestResponse = (res, { message = '' }) => {
     });
 };
 exports.sendServerErrorRequestResponse = sendServerErrorRequestResponse;
+const sendAccessDeniedRequestResponse = (res) => {
+    res.status(_constant_1.STATUS_CODE.ACCESS_DENIED).json({
+        status: _constant_1.STATUS_CODE.ACCESS_DENIED,
+        message: strings_1.ACCESS_MISSING
+    });
+};
+exports.sendAccessDeniedRequestResponse = sendAccessDeniedRequestResponse;
+const sendPlainResponseCode = (res, { code }) => {
+    res.sendStatus(code);
+};
+exports.sendPlainResponseCode = sendPlainResponseCode;
 const sendLoginRequestResponse = (res, { user, accessToken, refreshToken }) => {
     res.status(_constant_1.STATUS_CODE.SUCCESS).json({
         user,
@@ -62,8 +74,4 @@ const sendLogoutRequestResponse = (res, { message }) => {
     });
 };
 exports.sendLogoutRequestResponse = sendLogoutRequestResponse;
-const sendPlainResponseCode = (res, { code }) => {
-    res.sendStatus(code);
-};
-exports.sendPlainResponseCode = sendPlainResponseCode;
 //# sourceMappingURL=response-transmitter.js.map

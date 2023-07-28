@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"
 
 const Schema = mongoose.Schema;
-const employeeSchema = new Schema({
+const employeeSchema = new Schema<IEmployeeSchema>({
     firstname: {
         type: String,
         required: true
@@ -12,4 +12,8 @@ const employeeSchema = new Schema({
     }
 });
 
-export default mongoose.model('Employee', employeeSchema);
+const employeeModelSchema = mongoose.model('Employee', employeeSchema);
+
+// type employeeModelType = InferSchemaType<typeof employeeSchema>;
+
+export default employeeModelSchema

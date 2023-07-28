@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt'
 
-const generateEncryptPassword = async (password) => {
+const generateEncryptPassword = async (password): Promise<string> => {
     return await bcrypt.hash(password, 10);
 }
 
-const compareByCryptPassword = async (originalPassword, inputPassword) => {
+const compareByCryptPassword = async (originalPassword, inputPassword): Promise<boolean> => {
     return await bcrypt.compare(originalPassword, inputPassword);
 }
 

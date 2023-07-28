@@ -1,0 +1,1 @@
+type IUserTypes = import('@constant').USER_TYPES;

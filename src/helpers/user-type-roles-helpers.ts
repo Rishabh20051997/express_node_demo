@@ -1,6 +1,10 @@
 import { USER_TYPES } from "@constant"
 
-const getRolesOnBasisOfUserType = (userType: USER_TYPES) => {
+type IRolesObjectTypes = {
+    [P in IUserTypes ]: number;
+};
+
+const getRolesOnBasisOfUserType = (userType: USER_TYPES): IRolesObjectTypes => {
     let userRoles
 
     if (userType === USER_TYPES.ADMIN) {

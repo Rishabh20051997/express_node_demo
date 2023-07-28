@@ -16,8 +16,13 @@ const {
     ALREADY_EXISTS
 } = AUTHORIZATION_STRINGS
 
-export const handleNewUser = async (req, res) => {
-    const { userName, password, userType } = req.body;
+export const handleNewUser = async (req: IRequest, res: IResponse) => {
+    const { userName, password, userType } : {
+        userName: string | undefined
+        password: string | undefined
+        userType: IUserTypes | undefined
+    } = req.body;
+    
     if (!userName || !password) {
         return sendBadRequestResponse(res, {
             message: INVALID_PARAMS

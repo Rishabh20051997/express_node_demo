@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUserByUserId = exports.getUserByUserId = exports.deleteUserRefreshToken = exports.getUserByRefreshToken = exports.updateUserRefreshToken = exports.getUserByUserName = exports.getAllUsersList = exports.createNewUserEntry = void 0;
 const user_model_1 = __importDefault(require("@model/user-model"));
 const createNewUserEntry = ({ userName, hashedPwd, userRoles }) => __awaiter(void 0, void 0, void 0, function* () {
-    yield user_model_1.default.create({
+    return yield user_model_1.default.create({
         "username": userName,
         "password": hashedPwd,
         "roles": userRoles
@@ -43,7 +43,7 @@ const getUserByRefreshToken = (refreshToken) => __awaiter(void 0, void 0, void 0
 exports.getUserByRefreshToken = getUserByRefreshToken;
 const updateUserRefreshToken = (refreshToken, user) => __awaiter(void 0, void 0, void 0, function* () {
     user.refreshToken = refreshToken;
-    yield user.save();
+    return yield user.save();
 });
 exports.updateUserRefreshToken = updateUserRefreshToken;
 const deleteUserRefreshToken = (user) => __awaiter(void 0, void 0, void 0, function* () {

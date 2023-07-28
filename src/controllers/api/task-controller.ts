@@ -16,7 +16,7 @@ import {
 
 
 
-export const getAllTasks = async (_req, res) => {
+export const getAllTasks = async (_req: IRequest, res: IResponse) => {
     const taskList = await getAllTasksList()
     if (!taskList.length) {
         return sendSuccessRequestForNoDataResponse(res, {
@@ -33,9 +33,8 @@ export const getAllTasks = async (_req, res) => {
 }
 
 
-
-export const createNewTask = async (req, res) => {
-    const task = req?.body?.task
+export const createNewTask = async (req: IRequest, res: IResponse) => {
+    const task: string | undefined = req?.body?.task
     if (!task) {
         return sendBadRequestResponse(res, {
             message: TASK_LIST_RESPONSE_LABEL.TASK_REQUIRED

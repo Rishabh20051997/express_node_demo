@@ -13,7 +13,7 @@ exports.getEmployee = exports.deleteEmployee = exports.updateEmployee = exports.
 const strings_1 = require("@common/strings");
 const employee_use_cases_1 = require("@use-cases/employee-use-cases");
 const response_transmitter_1 = require("@services/response-transmitter");
-const getAllEmployees = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllEmployees = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const employees = yield (0, employee_use_cases_1.getAllEmployeesList)();
     if (!employees.length) {
         return (0, response_transmitter_1.sendSuccessRequestForNoDataResponse)(res, {
@@ -48,7 +48,7 @@ const createNewEmployee = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
     catch (err) {
         return (0, response_transmitter_1.sendBadRequestResponse)(res, {
-            message: err
+            message: err === null || err === void 0 ? void 0 : err.toString()
         });
     }
 });

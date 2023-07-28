@@ -31,7 +31,7 @@ const findEmployeeById = (id) => __awaiter(void 0, void 0, void 0, function* () 
     return yield employee_model_1.default.findOne({ _id: id }).exec();
 });
 exports.findEmployeeById = findEmployeeById;
-const updateEmployeeData = (employeeInstance, { firstName, lastName }) => __awaiter(void 0, void 0, void 0, function* () {
+const updateEmployeeData = (employeeInstance, { firstName = '', lastName = '' }) => __awaiter(void 0, void 0, void 0, function* () {
     if (firstName) {
         employeeInstance.firstname = lastName;
     }

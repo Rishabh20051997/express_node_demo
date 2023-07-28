@@ -3,8 +3,8 @@ import { generateAccessToken, verifyJwtRefreshToken } from '@helpers/token-handl
 import { deleteUserRefreshToken, getUserByRefreshToken } from '@use-cases/user-use-cases';
 import { sendLoginRequestResponse, sendLogoutRequestResponse } from '@services/response-transmitter';
 
-export const handleRefreshToken = async (req, res) => {
-    const refreshToken = req.body.refreshToken;
+export const handleRefreshToken = async (req: IRequest, res: IResponse) => {
+    const refreshToken: string | undefined = req.body.refreshToken;
     if (!refreshToken) {
         return sendLogoutRequestResponse(res, { message: LOGOUT_STRINGS.TOKEN_MISSING });
     }

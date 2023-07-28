@@ -18,8 +18,8 @@ export const verifyJWT = async (req, res, next) => {
         code: STATUS_CODE.UN_AUTHORIZED
     }); //invalid token
 
-    req.user = decoded.UserInfo.username;
-    req.roles = decoded.UserInfo.roles;
+    req.user = decoded?.UserInfo?.username;
+    req.roles = decoded?.UserInfo?.roles;
     next();
 
 }
