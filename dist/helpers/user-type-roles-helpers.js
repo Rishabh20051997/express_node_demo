@@ -2,6 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getRolesOnBasisOfUserType = void 0;
 const _constant_1 = require("@constant");
+/**
+ *
+ * @param {USER_TYPES} userType
+ * @returns userRoles Objects
+ */
 const getRolesOnBasisOfUserType = (userType) => {
     let userRoles;
     if (userType === _constant_1.USER_TYPES.ADMIN) {

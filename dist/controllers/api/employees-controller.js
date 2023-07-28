@@ -13,8 +13,15 @@ exports.getEmployee = exports.deleteEmployee = exports.updateEmployee = exports.
 const strings_1 = require("@common/strings");
 const employee_use_cases_1 = require("@use-cases/employee-use-cases");
 const response_transmitter_1 = require("@services/response-transmitter");
+/**
+ *
+ * @param req request from client
+ * @param res response instance to be sent
+ * @returns response back all employees list
+ */
 const getAllEmployees = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const employees = yield (0, employee_use_cases_1.getAllEmployeesList)();
+    // if employee list is empty
     if (!employees.length) {
         return (0, response_transmitter_1.sendSuccessRequestForNoDataResponse)(res, {
             message: strings_1.EMPLOYEE_LIST_RESPONSE_LABEL.NO_EMPLOYEES,
@@ -27,10 +34,17 @@ const getAllEmployees = (_req, res) => __awaiter(void 0, void 0, void 0, functio
     });
 });
 exports.getAllEmployees = getAllEmployees;
+/**
+ *
+ * @param { firstname: string , lastname : string} req request from client
+ * @param res response instance to be sent
+ * @returns new employee created response
+ */
 const createNewEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     const firstName = (_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.firstname;
     const lastName = (_b = req === null || req === void 0 ? void 0 : req.body) === null || _b === void 0 ? void 0 : _b.lastname;
+    // if params are not proper -> return
     if (!firstName || !lastName) {
         return (0, response_transmitter_1.sendBadRequestResponse)(res, {
             message: strings_1.EMPLOYEE_LIST_RESPONSE_LABEL.PARAMS_REQUIRED
@@ -53,17 +67,25 @@ const createNewEmployee = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.createNewEmployee = createNewEmployee;
+/**
+ *
+ * @param { id: string, firstname: string , lastname : string} req request from client
+ * @param res response instance to be sent
+ * @returns update the existing employee data using its id & sends back response
+ */
 const updateEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _c, _d, _e;
     const id = (_c = req === null || req === void 0 ? void 0 : req.body) === null || _c === void 0 ? void 0 : _c.id;
     const firstName = (_d = req.body) === null || _d === void 0 ? void 0 : _d.firstname;
     const lastName = (_e = req.body) === null || _e === void 0 ? void 0 : _e.lastname;
+    // if id param is not there
     if (!id) {
         return (0, response_transmitter_1.sendBadRequestResponse)(res, {
             message: strings_1.EMPLOYEE_LIST_RESPONSE_LABEL.ID_MISSING
         });
     }
     const employee = yield (0, employee_use_cases_1.findEmployeeById)(id);
+    // if employee doesn't exists
     if (!employee) {
         return (0, response_transmitter_1.sendSuccessRequestForNoDataResponse)(res, {
             message: strings_1.EMPLOYEE_LIST_RESPONSE_LABEL.NO_EMPLOYEE_FOUND,
@@ -80,15 +102,23 @@ const updateEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function*
     });
 });
 exports.updateEmployee = updateEmployee;
+/**
+ *
+ * @param { id: string} req request from client
+ * @param res response instance to be sent
+ * @returns delete the existing employee data using its id & sends back response
+ */
 const deleteEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _f;
     const id = (_f = req === null || req === void 0 ? void 0 : req.body) === null || _f === void 0 ? void 0 : _f.id;
+    // if id param is not there
     if (!id) {
         return (0, response_transmitter_1.sendBadRequestResponse)(res, {
             message: strings_1.EMPLOYEE_LIST_RESPONSE_LABEL.ID_MISSING
         });
     }
     const employee = yield (0, employee_use_cases_1.findEmployeeById)(id);
+    // if employee doesn't exists
     if (!employee) {
         return (0, response_transmitter_1.sendSuccessRequestForNoDataResponse)(res, {
             message: strings_1.EMPLOYEE_LIST_RESPONSE_LABEL.NO_EMPLOYEE_FOUND,
@@ -102,15 +132,23 @@ const deleteEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function*
     });
 });
 exports.deleteEmployee = deleteEmployee;
+/**
+ *
+ * @param { id: string} req request from client
+ * @param res response instance to be sent
+ * @returns finds the existing employee data using its id & sends back response
+ */
 const getEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _g;
     const id = (_g = req === null || req === void 0 ? void 0 : req.body) === null || _g === void 0 ? void 0 : _g.id;
+    // if id param is not there
     if (!id) {
         return (0, response_transmitter_1.sendBadRequestResponse)(res, {
             message: strings_1.EMPLOYEE_LIST_RESPONSE_LABEL.ID_MISSING
         });
     }
     const employee = yield (0, employee_use_cases_1.findEmployeeById)(id);
+    // if employee doesn't exists
     if (!employee) {
         return (0, response_transmitter_1.sendSuccessRequestForNoDataResponse)(res, {
             message: strings_1.EMPLOYEE_LIST_RESPONSE_LABEL.NO_EMPLOYEE_FOUND,

@@ -16,6 +16,13 @@ const {
     ALREADY_EXISTS
 } = AUTHORIZATION_STRINGS
 
+
+/**
+ * 
+ * @param {userName: string, password: string, userType: IUserTypes } req request from client
+ * @param res response instance to be sent
+ * @returns register new user using userName & password & responds back
+ */
 export const handleNewUser = async (req: IRequest, res: IResponse) => {
     const { userName, password, userType } : {
         userName: string | undefined
@@ -23,6 +30,7 @@ export const handleNewUser = async (req: IRequest, res: IResponse) => {
         userType: IUserTypes | undefined
     } = req.body;
     
+    // validating params failed
     if (!userName || !password) {
         return sendBadRequestResponse(res, {
             message: INVALID_PARAMS
@@ -32,7 +40,7 @@ export const handleNewUser = async (req: IRequest, res: IResponse) => {
     // check for duplicate usernames in the db
     const duplicate = await getUserByUserName(userName);
 
-    //Conflict
+    //Conflict -> User already exists
     if (duplicate) {
         return sendConflictsRequestResponse(res, { message: ALREADY_EXISTS })
     }

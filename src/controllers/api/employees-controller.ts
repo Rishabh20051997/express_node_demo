@@ -16,8 +16,16 @@ import {
     sendSuccessRequestResponse
 } from '@services/response-transmitter';
 
+/**
+ * 
+ * @param req request from client
+ * @param res response instance to be sent
+ * @returns response back all employees list
+ */
 export const getAllEmployees = async (_req: IRequest, res: IResponse) => {
     const employees = await getAllEmployeesList()
+
+    // if employee list is empty
     if (!employees.length) {
         return sendSuccessRequestForNoDataResponse(res, {
             message: EMPLOYEE_LIST_RESPONSE_LABEL.NO_EMPLOYEES,
@@ -31,10 +39,17 @@ export const getAllEmployees = async (_req: IRequest, res: IResponse) => {
     })
 }
 
+/**
+ * 
+ * @param { firstname: string , lastname : string} req request from client
+ * @param res response instance to be sent
+ * @returns new employee created response
+ */
 export const createNewEmployee = async (req: IRequest, res: IResponse) => {
     const firstName: string | undefined = req?.body?.firstname
     const lastName: string | undefined = req?.body?.lastname
 
+    // if params are not proper -> return
     if (!firstName || !lastName) {
         return sendBadRequestResponse(res, {
             message: EMPLOYEE_LIST_RESPONSE_LABEL.PARAMS_REQUIRED
@@ -58,11 +73,19 @@ export const createNewEmployee = async (req: IRequest, res: IResponse) => {
     }
 }
 
+
+/**
+ * 
+ * @param { id: string, firstname: string , lastname : string} req request from client
+ * @param res response instance to be sent
+ * @returns update the existing employee data using its id & sends back response
+ */
 export const updateEmployee = async (req: IRequest, res: IResponse) => {
     const id: string | undefined = req?.body?.id
     const firstName: string | undefined = req.body?.firstname
     const lastName: string | undefined = req.body?.lastname
 
+    // if id param is not there
     if (!id) {
         return sendBadRequestResponse(res, {
             message: EMPLOYEE_LIST_RESPONSE_LABEL.ID_MISSING
@@ -71,6 +94,7 @@ export const updateEmployee = async (req: IRequest, res: IResponse) => {
 
     const employee = await findEmployeeById(id)
 
+    // if employee doesn't exists
     if (!employee) {
         return sendSuccessRequestForNoDataResponse(res, {
             message: EMPLOYEE_LIST_RESPONSE_LABEL.NO_EMPLOYEE_FOUND,
@@ -89,8 +113,17 @@ export const updateEmployee = async (req: IRequest, res: IResponse) => {
     })
 }
 
+
+/**
+ * 
+ * @param { id: string} req request from client
+ * @param res response instance to be sent
+ * @returns delete the existing employee data using its id & sends back response
+ */
 export const deleteEmployee = async (req: IRequest, res: IResponse) => {
     const id: string | undefined = req?.body?.id
+
+    // if id param is not there
     if (!id) {
         return sendBadRequestResponse(res, {
             message: EMPLOYEE_LIST_RESPONSE_LABEL.ID_MISSING
@@ -99,6 +132,7 @@ export const deleteEmployee = async (req: IRequest, res: IResponse) => {
 
     const employee = await findEmployeeById(id)
 
+    // if employee doesn't exists
     if (!employee) {
         return sendSuccessRequestForNoDataResponse(res, {
             message: EMPLOYEE_LIST_RESPONSE_LABEL.NO_EMPLOYEE_FOUND,
@@ -113,8 +147,17 @@ export const deleteEmployee = async (req: IRequest, res: IResponse) => {
     })
 }
 
+
+/**
+ * 
+ * @param { id: string} req request from client
+ * @param res response instance to be sent
+ * @returns finds the existing employee data using its id & sends back response
+ */
 export const getEmployee = async (req: IRequest, res: IResponse) => {
     const id: string | undefined = req?.body?.id
+
+    // if id param is not there
     if (!id) {
         return sendBadRequestResponse(res, {
             message: EMPLOYEE_LIST_RESPONSE_LABEL.ID_MISSING
@@ -123,6 +166,7 @@ export const getEmployee = async (req: IRequest, res: IResponse) => {
 
     const employee = await findEmployeeById(id)
 
+    // if employee doesn't exists
     if (!employee) {
         return sendSuccessRequestForNoDataResponse(res, {
             message: EMPLOYEE_LIST_RESPONSE_LABEL.NO_EMPLOYEE_FOUND,

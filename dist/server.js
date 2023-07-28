@@ -27,7 +27,12 @@ const logger_service_1 = require("@services/logger-service");
 const PORT = process.env.PORT || 3500;
 const app = (0, express_1.default)();
 // Connect to MongoDB
-mongoose_1.default.connect(process.env.DATABASE_URI);
+try {
+    mongoose_1.default.connect(process.env.DATABASE_URI);
+}
+catch (err) {
+    (0, logger_service_1.log)('DB Connection Failed : ', err);
+}
 // custom middleware logger
 app.use(log_events_1.logger);
 // Handle options credentials check - before CORS!

@@ -1,3 +1,5 @@
+
+// mapping of roles of user with random number
 export const ROLES_LIST = {
     "Admin": 5150,
     "Editor": 1984,

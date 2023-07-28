@@ -15,13 +15,22 @@ const strings_1 = require("@common/strings");
 const user_use_cases_1 = require("@use-cases/user-use-cases");
 const response_transmitter_1 = require("@services/response-transmitter");
 const { TOKEN_MISSING, NO_USER_FOUND } = strings_1.LOGOUT_STRINGS;
+/**
+ *
+ * @param {refreshToken: string} req request from client
+ * @param res response instance to be sent
+ * @returns handle logout using refreshToken & deletes refreshToken from user info & responds back
+ */
 const handleLogout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const refreshToken = req.body.refreshToken;
+    var _a;
+    const refreshToken = (_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.refreshToken;
+    // invalid params
     if (!refreshToken) {
         return (0, response_transmitter_1.sendLogoutRequestResponse)(res, { message: TOKEN_MISSING });
     }
     // Is refreshToken in db?
     const foundUser = yield (0, user_use_cases_1.getUserByRefreshToken)(refreshToken);
+    // no user found with refresh token -> refresh token - tempered 
     if (!foundUser) {
         return (0, response_transmitter_1.sendLogoutRequestResponse)(res, { message: NO_USER_FOUND });
     }

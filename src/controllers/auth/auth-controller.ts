@@ -10,20 +10,26 @@ const {
 } = AUTHORIZATION_STRINGS
 
 
+/**
+ * 
+ * @param {userName: string, password: string} req request from client
+ * @param res response instance to be sent
+ * @returns handle login using userName & password & responds back
+ */
 export const handleLogin = async (req: IRequest, res: IResponse) => {
     const { userName, password } : {
         userName: string | undefined
         password: string | undefined
     } = req.body;
 
-    // validation params
+    // validating params failed
     if (!userName || !password) {
         return sendBadRequestResponse(res, { message: INVALID_PARAMS })
     }
 
     const foundUser = await getUserByUserName(userName)
 
-    //Unauthorized
+    //Unauthorized -> user doesn't exists
     if (!foundUser) {
         return sendBadRequestResponse(res, { message: INCORRECT_CREDENTIALS })
     }
@@ -31,6 +37,7 @@ export const handleLogin = async (req: IRequest, res: IResponse) => {
     // evaluate password 
     const match = await compareByCryptPassword(password, foundUser.password)
 
+    // if password matched
     if (match) {
         const roles = Object.values(foundUser.roles).filter(Boolean);
         // create JWTs
@@ -56,7 +63,7 @@ export const handleLogin = async (req: IRequest, res: IResponse) => {
         });
 
     } else {
-        //Unauthorized
+        //Unauthorized -> password mis-matched
         sendBadRequestResponse(res, { message: INCORRECT_CREDENTIALS })
     }
 }

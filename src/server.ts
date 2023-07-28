@@ -31,7 +31,11 @@ const PORT = process.env.PORT || 3500;
 const app = express();
 
 // Connect to MongoDB
+try {
 mongoose.connect(process.env.DATABASE_URI);
+} catch(err) {
+    log('DB Connection Failed : ',err );
+}
 
 // custom middleware logger
 app.use(logger);
@@ -83,4 +87,5 @@ app.use(errorHandler);
 mongoose.connection.once('open', () => {
     log('Connected to MongoDB');
     app.listen(PORT, () => log(`Server running on port ${PORT}`));
-});
+})
+

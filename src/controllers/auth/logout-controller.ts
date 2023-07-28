@@ -8,10 +8,17 @@ const {
     NO_USER_FOUND
 } = LOGOUT_STRINGS
 
-
+/**
+ * 
+ * @param {refreshToken: string} req request from client
+ * @param res response instance to be sent
+ * @returns handle logout using refreshToken & deletes refreshToken from user info & responds back
+ */
 export const handleLogout = async (req: IRequest, res: IResponse) => {
 
-    const refreshToken: string | undefined = req.body.refreshToken;
+    const refreshToken: string | undefined = req?.body?.refreshToken;
+
+    // invalid params
     if (!refreshToken) {
         return sendLogoutRequestResponse(res, { message: TOKEN_MISSING })
     }
@@ -19,6 +26,7 @@ export const handleLogout = async (req: IRequest, res: IResponse) => {
     // Is refreshToken in db?
     const foundUser = await getUserByRefreshToken(refreshToken)
 
+    // no user found with refresh token -> refresh token - tempered 
     if (!foundUser) {
         return sendLogoutRequestResponse(res, { message: NO_USER_FOUND })
     }

@@ -16,19 +16,26 @@ const token_handlers_1 = require("@helpers/token-handlers");
 const user_use_cases_1 = require("@use-cases/user-use-cases");
 const response_transmitter_1 = require("@services/response-transmitter");
 const { INCORRECT_CREDENTIALS, INVALID_PARAMS } = strings_1.AUTHORIZATION_STRINGS;
+/**
+ *
+ * @param {userName: string, password: string} req request from client
+ * @param res response instance to be sent
+ * @returns handle login using userName & password & responds back
+ */
 const handleLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userName, password } = req.body;
-    // validation params
+    // validating params failed
     if (!userName || !password) {
         return (0, response_transmitter_1.sendBadRequestResponse)(res, { message: INVALID_PARAMS });
     }
     const foundUser = yield (0, user_use_cases_1.getUserByUserName)(userName);
-    //Unauthorized
+    //Unauthorized -> user doesn't exists
     if (!foundUser) {
         return (0, response_transmitter_1.sendBadRequestResponse)(res, { message: INCORRECT_CREDENTIALS });
     }
     // evaluate password 
     const match = yield (0, bcrypt_helper_1.compareByCryptPassword)(password, foundUser.password);
+    // if password matched
     if (match) {
         const roles = Object.values(foundUser.roles).filter(Boolean);
         // create JWTs
@@ -51,7 +58,7 @@ const handleLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
     else {
-        //Unauthorized
+        //Unauthorized -> password mis-matched
         (0, response_transmitter_1.sendBadRequestResponse)(res, { message: INCORRECT_CREDENTIALS });
     }
 });

@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 
+// Employee schema
 const Schema = mongoose.Schema;
 const employeeSchema = new Schema<IEmployeeSchema>({
     firstname: {

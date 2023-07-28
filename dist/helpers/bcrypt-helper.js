@@ -14,10 +14,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateEncryptPassword = exports.compareByCryptPassword = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
+/**
+ *
+ * @param password user password
+ * @returns encrypted password
+ */
 const generateEncryptPassword = (password) => __awaiter(void 0, void 0, void 0, function* () {
     return yield bcrypt_1.default.hash(password, 10);
 });
 exports.generateEncryptPassword = generateEncryptPassword;
+/**
+ *
+ * @param inputPassword password entered by user
+ * @param originalPassword user actual password
+ * @returns boolean if password matches or not
+ */
 const compareByCryptPassword = (originalPassword, inputPassword) => __awaiter(void 0, void 0, void 0, function* () {
     return yield bcrypt_1.default.compare(originalPassword, inputPassword);
 });

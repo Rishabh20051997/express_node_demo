@@ -16,8 +16,15 @@ const user_type_roles_helpers_1 = require("@helpers/user-type-roles-helpers");
 const user_use_cases_1 = require("@use-cases/user-use-cases");
 const response_transmitter_1 = require("@services/response-transmitter");
 const { INVALID_PARAMS, ALREADY_EXISTS } = strings_1.AUTHORIZATION_STRINGS;
+/**
+ *
+ * @param {userName: string, password: string, userType: IUserTypes } req request from client
+ * @param res response instance to be sent
+ * @returns register new user using userName & password & responds back
+ */
 const handleNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userName, password, userType } = req.body;
+    // validating params failed
     if (!userName || !password) {
         return (0, response_transmitter_1.sendBadRequestResponse)(res, {
             message: INVALID_PARAMS
@@ -25,7 +32,7 @@ const handleNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     // check for duplicate usernames in the db
     const duplicate = yield (0, user_use_cases_1.getUserByUserName)(userName);
-    //Conflict
+    //Conflict -> User already exists
     if (duplicate) {
         return (0, response_transmitter_1.sendConflictsRequestResponse)(res, { message: ALREADY_EXISTS });
     }

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// Task schema
 const Schema = mongoose.Schema;
 const taskSchema = new Schema<ITaskSchema>({
     task: {

@@ -4,6 +4,12 @@ type IRolesObjectTypes = {
     [P in IUserTypes ]: number;
 };
 
+
+/**
+ * 
+ * @param {USER_TYPES} userType 
+ * @returns userRoles Objects
+ */
 const getRolesOnBasisOfUserType = (userType: USER_TYPES): IRolesObjectTypes => {
     let userRoles
 

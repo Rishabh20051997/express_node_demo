@@ -13,8 +13,15 @@ exports.getUser = exports.deleteUser = exports.getAllUsers = void 0;
 const user_use_cases_1 = require("@use-cases/user-use-cases");
 const response_transmitter_1 = require("@services/response-transmitter");
 const strings_1 = require("@common/strings");
+/**
+ *
+ * @param req request from client
+ * @param res response instance to be sent
+ * @returns response back all users list who has registered the app
+ */
 const getAllUsers = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield (0, user_use_cases_1.getAllUsersList)();
+    // if user list is empty
     if (!users.length) {
         return (0, response_transmitter_1.sendSuccessRequestForNoDataResponse)(res, {
             message: strings_1.USER_LIST_RESPONSE_LABEL.NO_USER,
@@ -27,15 +34,23 @@ const getAllUsers = (_req, res) => __awaiter(void 0, void 0, void 0, function* (
     });
 });
 exports.getAllUsers = getAllUsers;
+/**
+ *
+ * @param {id: string} req request from client
+ * @param res response instance to be sent
+ * @returns delete the existing user if present & response back to client
+ */
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const userId = (_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.id;
+    // invalid params
     if (!userId) {
         (0, response_transmitter_1.sendBadRequestResponse)(res, {
             message: strings_1.USER_LIST_RESPONSE_LABEL.ID_REQUIRED
         });
     }
     const user = yield (0, user_use_cases_1.getUserByUserId)(userId);
+    // if user doesn't exists
     if (!user) {
         return (0, response_transmitter_1.sendBadRequestResponse)(res, {
             message: strings_1.USER_LIST_RESPONSE_LABEL.USER_NOT_FOUND
@@ -48,15 +63,23 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     });
 });
 exports.deleteUser = deleteUser;
+/**
+ *
+ * @param {id: string} req request from client
+ * @param res response instance to be sent
+ * @returns find users using id & sends back user info
+ */
 const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     const userId = (_b = req === null || req === void 0 ? void 0 : req.body) === null || _b === void 0 ? void 0 : _b.id;
+    // invalid params
     if (!userId) {
         return (0, response_transmitter_1.sendBadRequestResponse)(res, {
             message: strings_1.USER_LIST_RESPONSE_LABEL.ID_REQUIRED
         });
     }
     const user = yield (0, user_use_cases_1.getUserByUserId)(userId);
+    // if user doesn't exists
     if (!user) {
         return (0, response_transmitter_1.sendSuccessRequestForNoDataResponse)(res, {
             message: strings_1.USER_LIST_RESPONSE_LABEL.USER_NOT_FOUND,
