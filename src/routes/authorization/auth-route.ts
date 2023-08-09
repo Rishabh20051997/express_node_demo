@@ -1,10 +1,11 @@
 import { Router } from 'express'
 
-import { handleLogin } from '@controllers/auth/auth-controller'
+import { loginUserController } from '@controllers/auth/auth-controller'
+import { authValidator } from '@serializers/validators/auth-validators';
 
 const authRouter = Router();
 
-authRouter.post('/', handleLogin);
+authRouter.post('/', authValidator, loginUserController);
 
 
 export default authRouter

@@ -8,36 +8,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserByUserId = exports.getUserByUserId = exports.deleteUserRefreshToken = exports.getUserByRefreshToken = exports.updateUserRefreshToken = exports.getUserByUserName = exports.getAllUsersList = exports.createNewUserEntry = void 0;
-const user_model_1 = __importDefault(require("@model/user-model"));
-const createNewUserEntry = ({ userName, hashedPwd, userRoles }) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield user_model_1.default.create({
+exports.deleteUserByUserId = exports.getUserByUserId = exports.deleteUserRefreshToken = exports.getUserByRefreshToken = exports.updateUserRefreshToken = exports.getUserByUserName = exports.getUsersList = exports.createUser = void 0;
+const createUser = (User, { userName, hashedPwd, userRoles }) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield User.create({
         "username": userName,
         "password": hashedPwd,
         "roles": userRoles
     });
 });
-exports.createNewUserEntry = createNewUserEntry;
-const getAllUsersList = () => __awaiter(void 0, void 0, void 0, function* () {
-    const list = yield user_model_1.default.find();
+exports.createUser = createUser;
+const getUsersList = (User) => __awaiter(void 0, void 0, void 0, function* () {
+    const list = yield User.find();
     return list || [];
 });
-exports.getAllUsersList = getAllUsersList;
-const getUserByUserId = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield user_model_1.default.findOne({ _id: userId }).exec();
+exports.getUsersList = getUsersList;
+const getUserByUserId = (User, { userId }) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield User.findOne({ _id: userId }).exec();
 });
 exports.getUserByUserId = getUserByUserId;
-const getUserByUserName = (userName) => __awaiter(void 0, void 0, void 0, function* () {
-    const foundUser = yield user_model_1.default.findOne({ username: userName }).exec();
+const getUserByUserName = (User, { userName }) => __awaiter(void 0, void 0, void 0, function* () {
+    const foundUser = yield User.findOne({ username: userName }).exec();
     return foundUser;
 });
 exports.getUserByUserName = getUserByUserName;
-const getUserByRefreshToken = (refreshToken) => __awaiter(void 0, void 0, void 0, function* () {
-    const foundUser = yield user_model_1.default.findOne({ refreshToken: refreshToken }).exec();
+const getUserByRefreshToken = (User, { refreshToken }) => __awaiter(void 0, void 0, void 0, function* () {
+    const foundUser = yield User.findOne({ refreshToken: refreshToken }).exec();
     return foundUser;
 });
 exports.getUserByRefreshToken = getUserByRefreshToken;

@@ -8,52 +8,42 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handleNewUser = void 0;
-const strings_1 = require("@common/strings");
+exports.registerUserController = void 0;
 const bcrypt_helper_1 = require("@helpers/bcrypt-helper");
 const user_type_roles_helpers_1 = require("@helpers/user-type-roles-helpers");
 const user_use_cases_1 = require("@use-cases/user-use-cases");
 const response_transmitter_1 = require("@services/response-transmitter");
-const { INVALID_PARAMS, ALREADY_EXISTS } = strings_1.AUTHORIZATION_STRINGS;
+const user_model_1 = __importDefault(require("@model/user-model"));
 /**
  *
  * @param {userName: string, password: string, userType: IUserTypes } req request from client
  * @param res response instance to be sent
  * @returns register new user using userName & password & responds back
  */
-const handleNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const registerUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userName, password, userType } = req.body;
-    // validating params failed
-    if (!userName || !password) {
-        return (0, response_transmitter_1.sendBadRequestResponse)(res, {
-            message: INVALID_PARAMS
-        });
-    }
-    // check for duplicate usernames in the db
-    const duplicate = yield (0, user_use_cases_1.getUserByUserName)(userName);
-    //Conflict -> User already exists
-    if (duplicate) {
-        return (0, response_transmitter_1.sendConflictsRequestResponse)(res, { message: ALREADY_EXISTS });
-    }
     try {
         //encrypt the password
-        const hashedPwd = (0, bcrypt_helper_1.generateEncryptPassword)(password);
+        const hashedPwd = yield (0, bcrypt_helper_1.generateEncryptPassword)(password);
         const userRoles = (0, user_type_roles_helpers_1.getRolesOnBasisOfUserType)(userType);
         //create and store the new user
-        const result = yield (0, user_use_cases_1.createNewUserEntry)({
+        const result = yield (0, user_use_cases_1.createUser)(user_model_1.default, {
             userName,
             hashedPwd,
             userRoles
         });
-        (0, response_transmitter_1.sendNewItemCreatedRequestResponse)(res, {
+        response_transmitter_1.sendResponse.createdRequest(res, {
             message: `New user ${userName} created! Please Login to continue.`,
             data: result
         });
     }
     catch (err) {
-        (0, response_transmitter_1.sendServerErrorRequestResponse)(res, { message: err.message });
+        response_transmitter_1.sendResponse.serverError(res, { message: err.message });
     }
 });
-exports.handleNewUser = handleNewUser;
+exports.registerUserController = registerUserController;
 //# sourceMappingURL=register-controller.js.map

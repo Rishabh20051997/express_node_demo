@@ -1,7 +1,7 @@
 
 import { STATUS_CODE } from '@constant';
-import { sendPlainResponseCode } from '@services/response-transmitter';
-import { verifyJwtAccessToken } from '@helpers/token-handlers';
+import { sendResponse } from '@services/response-transmitter';
+import { verifyJwtAccessToken } from '@services/token-service';
 
 
 // middleware to verify access token of client
@@ -9,7 +9,7 @@ export const verifyJWT = async (req, res, next) => {
     const authHeader = req.headers.authorization || req.headers.Authorization;
 
     if (!authHeader?.startsWith('Bearer ')) {
-        return sendPlainResponseCode(res, {
+        return sendResponse.plainCode(res, {
             code: STATUS_CODE.UN_AUTHORIZED
         })
     }
@@ -20,7 +20,7 @@ export const verifyJWT = async (req, res, next) => {
     const { err, decoded } = await verifyJwtAccessToken(token)
 
     // has error in verificcation
-    if (err) return sendPlainResponseCode(res, {
+    if (err) return sendResponse.plainCode(res, {
         code: STATUS_CODE.UN_AUTHORIZED
     }); //invalid token
 

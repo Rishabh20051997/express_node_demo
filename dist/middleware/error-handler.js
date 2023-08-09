@@ -7,7 +7,7 @@ const log_events_1 = require("./log-events");
 const errorHandler = (err, req, res) => {
     (0, log_events_1.logEvents)(`${err.name}: ${err.message}`, 'errLog.txt');
     console.error(err.stack);
-    (0, response_transmitter_1.sendServerErrorRequestResponse)(res, {
+    response_transmitter_1.sendResponse.serverError(res, {
         message: err.message
     });
 };

@@ -1,9 +1,9 @@
 import { Router } from 'express'
 
-import { handleRefreshToken } from '@controllers/auth/refresh-token-controller'
+import { refreshTokenController } from '@controllers/auth/refresh-token-controller'
 
 const refreshRouter = Router();
 
-refreshRouter.post('/', handleRefreshToken);
+refreshRouter.post('/', refreshTokenController);
 
 export default refreshRouter

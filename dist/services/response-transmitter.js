@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendAccessDeniedRequestResponse = exports.sendSuccessRequestForNoDataResponse = exports.sendSuccessRequestResponse = exports.sendServerErrorRequestResponse = exports.sendNewItemCreatedRequestResponse = exports.sendPlainResponseCode = exports.sendLogoutRequestResponse = exports.sendLoginRequestResponse = exports.sendConflictsRequestResponse = exports.sendBadRequestResponse = void 0;
+exports.sendResponse = exports.sendAccessDeniedRequestResponse = exports.sendSuccessRequestForNoDataResponse = exports.sendSuccessRequestResponse = exports.sendServerErrorRequestResponse = exports.sendNewItemCreatedRequestResponse = exports.sendPlainResponseCode = exports.sendLogoutRequestResponse = exports.sendLoginRequestResponse = exports.sendConflictsRequestResponse = exports.sendBadRequestResponse = void 0;
 const strings_1 = require("@common/strings");
 const _constant_1 = require("@constant");
 const sendBadRequestResponse = (res, { message = '' }) => {
@@ -74,4 +74,45 @@ const sendLogoutRequestResponse = (res, { message }) => {
     });
 };
 exports.sendLogoutRequestResponse = sendLogoutRequestResponse;
+// import { STATUS_CODE } from "@constant";
+const sendResponseTemplate = (primaryCode, secondaryCode = primaryCode) => (res, { message = '', data = '' }) => {
+    res.status(primaryCode).json({
+        status: secondaryCode,
+        message: message,
+        data: data
+    });
+};
+// const sendPlainResponseCode = (res: IResponse, {
+//     code
+// } : {
+//     code: number
+// }) => {
+//     res.sendStatus(code)
+// }
+// const sendLoginRequestResponse = (res: IResponse, {
+//     user,
+//     accessToken,
+//     refreshToken
+// }: {
+//     user: IUserResponseObject
+//     accessToken: string
+//     refreshToken:  string
+// }) => {
+//     res.status(STATUS_CODE.SUCCESS).json({
+//         user,
+//         accessToken,
+//         refreshToken
+//     });
+// }
+const sendResponse = {
+    success: sendResponseTemplate(_constant_1.STATUS_CODE.SUCCESS),
+    badRequest: sendResponseTemplate(_constant_1.STATUS_CODE.BAD_REQUEST),
+    conflictRequest: sendResponseTemplate(_constant_1.STATUS_CODE.CONFLICTS),
+    createdRequest: sendResponseTemplate(_constant_1.STATUS_CODE.CREATED),
+    serverError: sendResponseTemplate(_constant_1.STATUS_CODE.SERVER_ERROR),
+    accessDenied: sendResponseTemplate(_constant_1.STATUS_CODE.ACCESS_DENIED),
+    logOut: sendResponseTemplate(_constant_1.STATUS_CODE.LOGOUT),
+    plainCode: sendPlainResponseCode,
+};
+exports.sendResponse = sendResponse;
 //# sourceMappingURL=response-transmitter.js.map

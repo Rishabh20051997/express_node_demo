@@ -1,12 +1,12 @@
 import { AUTHORIZATION_STRINGS } from '@common/strings';
 import { compareByCryptPassword } from '@helpers/bcrypt-helper';
-import { generateAccessToken, generateRefreshToken } from '@helpers/token-handlers';
+import { generateAccessToken, generateRefreshToken } from '@services/token-service';
 import { getUserByUserName, updateUserRefreshToken } from '@use-cases/user-use-cases';
-import { sendBadRequestResponse, sendLoginRequestResponse } from '@services/response-transmitter';
+import { sendResponse, sendLoginRequestResponse } from '@services/response-transmitter';
+import User from '@model/user-model'
 
 const {
     INCORRECT_CREDENTIALS,
-    INVALID_PARAMS
 } = AUTHORIZATION_STRINGS
 
 
@@ -16,22 +16,17 @@ const {
  * @param res response instance to be sent
  * @returns handle login using userName & password & responds back
  */
-export const handleLogin = async (req: IRequest, res: IResponse) => {
+export const loginUserController = async (req: IRequest, res: IResponse) => {
     const { userName, password } : {
-        userName: string | undefined
-        password: string | undefined
+        userName: string
+        password: string
     } = req.body;
 
-    // validating params failed
-    if (!userName || !password) {
-        return sendBadRequestResponse(res, { message: INVALID_PARAMS })
-    }
-
-    const foundUser = await getUserByUserName(userName)
+    const foundUser = await getUserByUserName(User, { userName })
 
     //Unauthorized -> user doesn't exists
     if (!foundUser) {
-        return sendBadRequestResponse(res, { message: INCORRECT_CREDENTIALS })
+        return sendResponse.badRequest(res, { message: INCORRECT_CREDENTIALS })
     }
 
     // evaluate password 
@@ -64,6 +59,6 @@ export const handleLogin = async (req: IRequest, res: IResponse) => {
 
     } else {
         //Unauthorized -> password mis-matched
-        sendBadRequestResponse(res, { message: INCORRECT_CREDENTIALS })
+        sendResponse.badRequest(res, { message: INCORRECT_CREDENTIALS })
     }
 }

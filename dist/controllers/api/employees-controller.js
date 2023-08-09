@@ -8,157 +8,130 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEmployee = exports.deleteEmployee = exports.updateEmployee = exports.createNewEmployee = exports.getAllEmployees = void 0;
+exports.getEmployeeController = exports.deleteEmployeeController = exports.updateEmployeeController = exports.createEmployeeController = exports.employeeListController = void 0;
 const strings_1 = require("@common/strings");
 const employee_use_cases_1 = require("@use-cases/employee-use-cases");
 const response_transmitter_1 = require("@services/response-transmitter");
+const employee_model_1 = __importDefault(require("@model/employee-model"));
 /**
  *
  * @param req request from client
  * @param res response instance to be sent
  * @returns response back all employees list
  */
-const getAllEmployees = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const employees = yield (0, employee_use_cases_1.getAllEmployeesList)();
-    // if employee list is empty
-    if (!employees.length) {
-        return (0, response_transmitter_1.sendSuccessRequestForNoDataResponse)(res, {
-            message: strings_1.EMPLOYEE_LIST_RESPONSE_LABEL.NO_EMPLOYEES,
-            data: []
-        });
-    }
-    (0, response_transmitter_1.sendSuccessRequestResponse)(res, {
+const employeeListController = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const employees = yield (0, employee_use_cases_1.getEmployeesList)(employee_model_1.default);
+    response_transmitter_1.sendResponse.success(res, {
         message: strings_1.SUCCESS_RESPONSE_MESSAGE,
         data: employees
     });
 });
-exports.getAllEmployees = getAllEmployees;
+exports.employeeListController = employeeListController;
 /**
  *
  * @param { firstname: string , lastname : string} req request from client
  * @param res response instance to be sent
  * @returns new employee created response
  */
-const createNewEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createEmployeeController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     const firstName = (_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.firstname;
     const lastName = (_b = req === null || req === void 0 ? void 0 : req.body) === null || _b === void 0 ? void 0 : _b.lastname;
-    // if params are not proper -> return
-    if (!firstName || !lastName) {
-        return (0, response_transmitter_1.sendBadRequestResponse)(res, {
-            message: strings_1.EMPLOYEE_LIST_RESPONSE_LABEL.PARAMS_REQUIRED
-        });
-    }
     try {
-        const result = yield (0, employee_use_cases_1.createNewEmployeeEntry)({
+        const result = yield (0, employee_use_cases_1.createEmployee)(employee_model_1.default, {
             firstName,
             lastName
         });
-        (0, response_transmitter_1.sendNewItemCreatedRequestResponse)(res, {
+        response_transmitter_1.sendResponse.createdRequest(res, {
             message: strings_1.SUCCESS_RESPONSE_MESSAGE,
             data: result
         });
     }
     catch (err) {
-        return (0, response_transmitter_1.sendBadRequestResponse)(res, {
+        return response_transmitter_1.sendResponse.serverError(res, {
             message: err === null || err === void 0 ? void 0 : err.toString()
         });
     }
 });
-exports.createNewEmployee = createNewEmployee;
+exports.createEmployeeController = createEmployeeController;
 /**
  *
  * @param { id: string, firstname: string , lastname : string} req request from client
  * @param res response instance to be sent
  * @returns update the existing employee data using its id & sends back response
  */
-const updateEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updateEmployeeController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _c, _d, _e;
-    const id = (_c = req === null || req === void 0 ? void 0 : req.body) === null || _c === void 0 ? void 0 : _c.id;
+    const id = (_c = req === null || req === void 0 ? void 0 : req.params) === null || _c === void 0 ? void 0 : _c.id;
     const firstName = (_d = req.body) === null || _d === void 0 ? void 0 : _d.firstname;
     const lastName = (_e = req.body) === null || _e === void 0 ? void 0 : _e.lastname;
-    // if id param is not there
-    if (!id) {
-        return (0, response_transmitter_1.sendBadRequestResponse)(res, {
-            message: strings_1.EMPLOYEE_LIST_RESPONSE_LABEL.ID_MISSING
-        });
-    }
-    const employee = yield (0, employee_use_cases_1.findEmployeeById)(id);
+    const employee = yield (0, employee_use_cases_1.getEmployeeById)(employee_model_1.default, { id });
     // if employee doesn't exists
     if (!employee) {
-        return (0, response_transmitter_1.sendSuccessRequestForNoDataResponse)(res, {
+        return response_transmitter_1.sendResponse.badRequest(res, {
             message: strings_1.EMPLOYEE_LIST_RESPONSE_LABEL.NO_EMPLOYEE_FOUND,
             data: id
         });
     }
-    const result = yield (0, employee_use_cases_1.updateEmployeeData)(employee, {
+    const result = yield (0, employee_use_cases_1.updateEmployee)(employee, {
         firstName,
         lastName
     });
-    return (0, response_transmitter_1.sendSuccessRequestResponse)(res, {
+    return response_transmitter_1.sendResponse.success(res, {
         message: strings_1.SUCCESS_RESPONSE_MESSAGE,
         data: result
     });
 });
-exports.updateEmployee = updateEmployee;
+exports.updateEmployeeController = updateEmployeeController;
 /**
  *
  * @param { id: string} req request from client
  * @param res response instance to be sent
  * @returns delete the existing employee data using its id & sends back response
  */
-const deleteEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteEmployeeController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _f;
-    const id = (_f = req === null || req === void 0 ? void 0 : req.body) === null || _f === void 0 ? void 0 : _f.id;
-    // if id param is not there
-    if (!id) {
-        return (0, response_transmitter_1.sendBadRequestResponse)(res, {
-            message: strings_1.EMPLOYEE_LIST_RESPONSE_LABEL.ID_MISSING
-        });
-    }
-    const employee = yield (0, employee_use_cases_1.findEmployeeById)(id);
+    const id = (_f = req === null || req === void 0 ? void 0 : req.params) === null || _f === void 0 ? void 0 : _f.id;
+    const employee = yield (0, employee_use_cases_1.getEmployeeById)(employee_model_1.default, { id });
     // if employee doesn't exists
     if (!employee) {
-        return (0, response_transmitter_1.sendSuccessRequestForNoDataResponse)(res, {
+        return response_transmitter_1.sendResponse.badRequest(res, {
             message: strings_1.EMPLOYEE_LIST_RESPONSE_LABEL.NO_EMPLOYEE_FOUND,
             data: id
         });
     }
-    const result = yield (0, employee_use_cases_1.deleteEmployeeEntry)(employee); //{ _id: req.body.id }
-    return (0, response_transmitter_1.sendSuccessRequestResponse)(res, {
+    const result = yield (0, employee_use_cases_1.deleteEmployee)(employee); //{ _id: req.body.id }
+    return response_transmitter_1.sendResponse.success(res, {
         message: strings_1.SUCCESS_RESPONSE_MESSAGE,
         data: result
     });
 });
-exports.deleteEmployee = deleteEmployee;
+exports.deleteEmployeeController = deleteEmployeeController;
 /**
  *
  * @param { id: string} req request from client
  * @param res response instance to be sent
  * @returns finds the existing employee data using its id & sends back response
  */
-const getEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getEmployeeController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _g;
-    const id = (_g = req === null || req === void 0 ? void 0 : req.body) === null || _g === void 0 ? void 0 : _g.id;
-    // if id param is not there
-    if (!id) {
-        return (0, response_transmitter_1.sendBadRequestResponse)(res, {
-            message: strings_1.EMPLOYEE_LIST_RESPONSE_LABEL.ID_MISSING
-        });
-    }
-    const employee = yield (0, employee_use_cases_1.findEmployeeById)(id);
+    const id = (_g = req === null || req === void 0 ? void 0 : req.params) === null || _g === void 0 ? void 0 : _g.id;
+    const employee = yield (0, employee_use_cases_1.getEmployeeById)(employee_model_1.default, { id });
     // if employee doesn't exists
     if (!employee) {
-        return (0, response_transmitter_1.sendSuccessRequestForNoDataResponse)(res, {
+        return response_transmitter_1.sendResponse.badRequest(res, {
             message: strings_1.EMPLOYEE_LIST_RESPONSE_LABEL.NO_EMPLOYEE_FOUND,
             data: id
         });
     }
-    return (0, response_transmitter_1.sendSuccessRequestResponse)(res, {
+    return response_transmitter_1.sendResponse.success(res, {
         message: strings_1.SUCCESS_RESPONSE_MESSAGE,
         data: employee
     });
 });
-exports.getEmployee = getEmployee;
+exports.getEmployeeController = getEmployeeController;
 //# sourceMappingURL=employees-controller.js.map

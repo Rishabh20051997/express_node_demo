@@ -8,88 +8,73 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUser = exports.deleteUser = exports.getAllUsers = void 0;
+exports.getUserController = exports.deleteUserController = exports.userListController = void 0;
 const user_use_cases_1 = require("@use-cases/user-use-cases");
 const response_transmitter_1 = require("@services/response-transmitter");
 const strings_1 = require("@common/strings");
+const user_model_1 = __importDefault(require("@model/user-model"));
 /**
  *
  * @param req request from client
  * @param res response instance to be sent
  * @returns response back all users list who has registered the app
  */
-const getAllUsers = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield (0, user_use_cases_1.getAllUsersList)();
-    // if user list is empty
-    if (!users.length) {
-        return (0, response_transmitter_1.sendSuccessRequestForNoDataResponse)(res, {
-            message: strings_1.USER_LIST_RESPONSE_LABEL.NO_USER,
-            data: []
-        });
-    }
-    (0, response_transmitter_1.sendSuccessRequestResponse)(res, {
+const userListController = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const users = yield (0, user_use_cases_1.getUsersList)(user_model_1.default);
+    response_transmitter_1.sendResponse.success(res, {
         message: strings_1.SUCCESS_RESPONSE_MESSAGE,
         data: users
     });
 });
-exports.getAllUsers = getAllUsers;
+exports.userListController = userListController;
 /**
  *
  * @param {id: string} req request from client
  * @param res response instance to be sent
  * @returns delete the existing user if present & response back to client
  */
-const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    const userId = (_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.id;
-    // invalid params
-    if (!userId) {
-        (0, response_transmitter_1.sendBadRequestResponse)(res, {
-            message: strings_1.USER_LIST_RESPONSE_LABEL.ID_REQUIRED
-        });
-    }
-    const user = yield (0, user_use_cases_1.getUserByUserId)(userId);
+    const userId = (_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.id;
+    const user = yield (0, user_use_cases_1.getUserByUserId)(user_model_1.default, { userId });
     // if user doesn't exists
     if (!user) {
-        return (0, response_transmitter_1.sendBadRequestResponse)(res, {
+        return response_transmitter_1.sendResponse.badRequest(res, {
             message: strings_1.USER_LIST_RESPONSE_LABEL.USER_NOT_FOUND
         });
     }
     yield (0, user_use_cases_1.deleteUserByUserId)(user, userId);
-    (0, response_transmitter_1.sendSuccessRequestResponse)(res, {
+    response_transmitter_1.sendResponse.success(res, {
         message: strings_1.SUCCESS_RESPONSE_MESSAGE,
         data: ''
     });
 });
-exports.deleteUser = deleteUser;
+exports.deleteUserController = deleteUserController;
 /**
  *
  * @param {id: string} req request from client
  * @param res response instance to be sent
  * @returns find users using id & sends back user info
  */
-const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     const userId = (_b = req === null || req === void 0 ? void 0 : req.body) === null || _b === void 0 ? void 0 : _b.id;
-    // invalid params
-    if (!userId) {
-        return (0, response_transmitter_1.sendBadRequestResponse)(res, {
-            message: strings_1.USER_LIST_RESPONSE_LABEL.ID_REQUIRED
-        });
-    }
-    const user = yield (0, user_use_cases_1.getUserByUserId)(userId);
+    const user = yield (0, user_use_cases_1.getUserByUserId)(user_model_1.default, { userId });
     // if user doesn't exists
     if (!user) {
-        return (0, response_transmitter_1.sendSuccessRequestForNoDataResponse)(res, {
+        return response_transmitter_1.sendResponse.badRequest(res, {
             message: strings_1.USER_LIST_RESPONSE_LABEL.USER_NOT_FOUND,
             data: { userId: userId }
         });
     }
-    (0, response_transmitter_1.sendSuccessRequestResponse)(res, {
+    response_transmitter_1.sendResponse.success(res, {
         message: strings_1.SUCCESS_RESPONSE_MESSAGE,
         data: { user }
     });
 });
-exports.getUser = getUser;
+exports.getUserController = getUserController;
 //# sourceMappingURL=users-controller.js.map

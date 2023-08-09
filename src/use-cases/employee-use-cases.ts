@@ -1,11 +1,9 @@
-import Employee from "@model/employee-model";
-
-const getAllEmployeesList = async (): Promise<IEmployeeModelDocType[]> => {
+const getEmployeesList = async (Employee : EmployeeModalSchema): Promise<IEmployeeModelDocType[]> => {
     const list = await Employee.find();
     return list || []
 }
 
-const createNewEmployeeEntry = async ({
+const createEmployee = async (Employee: EmployeeModalSchema, {
     firstName,
     lastName
 }: {
@@ -19,11 +17,11 @@ const createNewEmployeeEntry = async ({
     return result
 }
 
-const findEmployeeById = async (id: string): Promise<IEmployeeModelDocType> => {
+const getEmployeeById = async (Employee: EmployeeModalSchema, { id } :{ id: string } ): Promise<IEmployeeModelDocType> => {
     return await Employee.findOne({ _id: id }).exec();
 }
 
-const updateEmployeeData = async (employeeInstance: IEmployeeModelDocType, {
+const updateEmployee = async (employeeInstance: IEmployeeModelDocType, {
     firstName = '',
     lastName = ''
 }): Promise<IEmployeeModelDocType> => {
@@ -36,14 +34,14 @@ const updateEmployeeData = async (employeeInstance: IEmployeeModelDocType, {
     return await employeeInstance.save();
 }
 
-const deleteEmployeeEntry = async (employeeInstance: IEmployeeModelDocType): Promise<IEmployeeModelDocType> => {
+const deleteEmployee = async (employeeInstance: IEmployeeModelDocType): Promise<IEmployeeModelDocType> => {
     return await employeeInstance.deleteOne();
 }
 
 export {
-    findEmployeeById,
-    updateEmployeeData,
-    getAllEmployeesList,
-    createNewEmployeeEntry,
-    deleteEmployeeEntry
+    getEmployeeById,
+    updateEmployee,
+    getEmployeesList,
+    createEmployee,
+    deleteEmployee
 }

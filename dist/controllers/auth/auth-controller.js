@@ -8,30 +8,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handleLogin = void 0;
+exports.loginUserController = void 0;
 const strings_1 = require("@common/strings");
 const bcrypt_helper_1 = require("@helpers/bcrypt-helper");
-const token_handlers_1 = require("@helpers/token-handlers");
+const token_service_1 = require("@services/token-service");
 const user_use_cases_1 = require("@use-cases/user-use-cases");
 const response_transmitter_1 = require("@services/response-transmitter");
-const { INCORRECT_CREDENTIALS, INVALID_PARAMS } = strings_1.AUTHORIZATION_STRINGS;
+const user_model_1 = __importDefault(require("@model/user-model"));
+const { INCORRECT_CREDENTIALS, } = strings_1.AUTHORIZATION_STRINGS;
 /**
  *
  * @param {userName: string, password: string} req request from client
  * @param res response instance to be sent
  * @returns handle login using userName & password & responds back
  */
-const handleLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const loginUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userName, password } = req.body;
-    // validating params failed
-    if (!userName || !password) {
-        return (0, response_transmitter_1.sendBadRequestResponse)(res, { message: INVALID_PARAMS });
-    }
-    const foundUser = yield (0, user_use_cases_1.getUserByUserName)(userName);
+    const foundUser = yield (0, user_use_cases_1.getUserByUserName)(user_model_1.default, { userName });
     //Unauthorized -> user doesn't exists
     if (!foundUser) {
-        return (0, response_transmitter_1.sendBadRequestResponse)(res, { message: INCORRECT_CREDENTIALS });
+        return response_transmitter_1.sendResponse.badRequest(res, { message: INCORRECT_CREDENTIALS });
     }
     // evaluate password 
     const match = yield (0, bcrypt_helper_1.compareByCryptPassword)(password, foundUser.password);
@@ -39,11 +39,11 @@ const handleLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     if (match) {
         const roles = Object.values(foundUser.roles).filter(Boolean);
         // create JWTs
-        const accessToken = (0, token_handlers_1.generateAccessToken)({
+        const accessToken = (0, token_service_1.generateAccessToken)({
             username: foundUser.username,
             roles
         });
-        const refreshToken = (0, token_handlers_1.generateRefreshToken)({ username: foundUser.username });
+        const refreshToken = (0, token_service_1.generateRefreshToken)({ username: foundUser.username });
         // Saving refreshToken with current user
         (0, user_use_cases_1.updateUserRefreshToken)(refreshToken, foundUser);
         // Send authorization roles and access token to user
@@ -59,8 +59,8 @@ const handleLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
     else {
         //Unauthorized -> password mis-matched
-        (0, response_transmitter_1.sendBadRequestResponse)(res, { message: INCORRECT_CREDENTIALS });
+        response_transmitter_1.sendResponse.badRequest(res, { message: INCORRECT_CREDENTIALS });
     }
 });
-exports.handleLogin = handleLogin;
+exports.loginUserController = loginUserController;
 //# sourceMappingURL=auth-controller.js.map

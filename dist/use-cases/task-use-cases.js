@@ -8,22 +8,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllTasksList = exports.createNewTaskEntry = void 0;
-const task_model_1 = __importDefault(require("@model/task-model"));
-const getAllTasksList = () => __awaiter(void 0, void 0, void 0, function* () {
-    const list = yield task_model_1.default.find();
+exports.getTasksList = exports.createTask = void 0;
+const getTasksList = (Task) => __awaiter(void 0, void 0, void 0, function* () {
+    const list = yield Task.find();
     return list || [];
 });
-exports.getAllTasksList = getAllTasksList;
-const createNewTaskEntry = (task) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield task_model_1.default.create({
+exports.getTasksList = getTasksList;
+const createTask = (Task, { task }) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield Task.create({
         task
     });
     return result;
 });
-exports.createNewTaskEntry = createNewTaskEntry;
+exports.createTask = createTask;
 //# sourceMappingURL=task-use-cases.js.map

@@ -21,6 +21,7 @@ export enum STATUS_CODE {
     BAD_REQUEST = 400,
     UN_AUTHORIZED = 401,
     ACCESS_DENIED = 403,
+    NOT_FOUND = 404,
     CONFLICTS = 409,
     LOGOUT = 440,
 

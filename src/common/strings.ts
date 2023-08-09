@@ -28,6 +28,7 @@ const EMPLOYEE_LIST_RESPONSE_LABEL = {
     NO_EMPLOYEE_FOUND: 'No employee Found'
 }
 
+
 const SUCCESS_RESPONSE_MESSAGE = 'Success'
 const SOMETHING_WENT_WRONG_MESSAGE = 'Something Went Wrong'
 const CORS_ERROR_MESSAGE = 'Not allowed by CORS'

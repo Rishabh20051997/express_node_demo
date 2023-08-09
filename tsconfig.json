@@ -20,7 +20,8 @@
         "@routes/*": ["routes/*"],
         "@services/*": ["services/*"],
         "@use-cases/*": ["use-cases/*"],
-        "@views/*": ["views/*"]
+        "@views/*": ["views/*"],
+        "@serializers/*": ["serializers/*"]
       }
     },
     "lib": ["es2015"],

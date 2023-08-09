@@ -3,18 +3,14 @@ import {
     SUCCESS_RESPONSE_MESSAGE
 } from '@common/strings';
 import {
-    createNewEmployeeEntry,
-    deleteEmployeeEntry,
-    findEmployeeById,
-    getAllEmployeesList,
-    updateEmployeeData
+    createEmployee,
+    deleteEmployee,
+    getEmployeeById,
+    getEmployeesList,
+    updateEmployee
 } from '@use-cases/employee-use-cases';
-import {
-    sendBadRequestResponse,
-    sendNewItemCreatedRequestResponse,
-    sendSuccessRequestForNoDataResponse,
-    sendSuccessRequestResponse
-} from '@services/response-transmitter';
+import { sendResponse } from '@services/response-transmitter';
+import Employee from "@model/employee-model";
 
 /**
  * 
@@ -22,18 +18,11 @@ import {
  * @param res response instance to be sent
  * @returns response back all employees list
  */
-export const getAllEmployees = async (_req: IRequest, res: IResponse) => {
-    const employees = await getAllEmployeesList()
+export const employeeListController = async (_req: IRequest, res: IResponse) => {
+    const employees = await getEmployeesList(Employee)
 
-    // if employee list is empty
-    if (!employees.length) {
-        return sendSuccessRequestForNoDataResponse(res, {
-            message: EMPLOYEE_LIST_RESPONSE_LABEL.NO_EMPLOYEES,
-            data: []
-        })
-    }
 
-    sendSuccessRequestResponse(res, {
+    sendResponse.success(res, {
         message: SUCCESS_RESPONSE_MESSAGE,
         data: employees
     })
@@ -45,29 +34,22 @@ export const getAllEmployees = async (_req: IRequest, res: IResponse) => {
  * @param res response instance to be sent
  * @returns new employee created response
  */
-export const createNewEmployee = async (req: IRequest, res: IResponse) => {
-    const firstName: string | undefined = req?.body?.firstname
-    const lastName: string | undefined = req?.body?.lastname
-
-    // if params are not proper -> return
-    if (!firstName || !lastName) {
-        return sendBadRequestResponse(res, {
-            message: EMPLOYEE_LIST_RESPONSE_LABEL.PARAMS_REQUIRED
-        })
-    }
+export const createEmployeeController = async (req: IRequest, res: IResponse) => {
+    const firstName: string = req?.body?.firstname
+    const lastName: string = req?.body?.lastname
 
     try {
-        const result = await createNewEmployeeEntry({
+        const result = await createEmployee(Employee, {
             firstName,
             lastName
         })
-
-        sendNewItemCreatedRequestResponse(res, {
+        sendResponse.createdRequest(res, {
             message: SUCCESS_RESPONSE_MESSAGE,
             data: result
         })
+
     } catch (err) {
-        return sendBadRequestResponse(res, {
+        return sendResponse.serverError(res, {
             message: err?.toString()
         })
     }
@@ -80,34 +62,27 @@ export const createNewEmployee = async (req: IRequest, res: IResponse) => {
  * @param res response instance to be sent
  * @returns update the existing employee data using its id & sends back response
  */
-export const updateEmployee = async (req: IRequest, res: IResponse) => {
-    const id: string | undefined = req?.body?.id
-    const firstName: string | undefined = req.body?.firstname
-    const lastName: string | undefined = req.body?.lastname
+export const updateEmployeeController = async (req: IRequest, res: IResponse) => {
+    const id: string  = req?.params?.id
+    const firstName: string  = req.body?.firstname
+    const lastName: string  = req.body?.lastname
 
-    // if id param is not there
-    if (!id) {
-        return sendBadRequestResponse(res, {
-            message: EMPLOYEE_LIST_RESPONSE_LABEL.ID_MISSING
-        })
-    }
-
-    const employee = await findEmployeeById(id)
+    const employee = await getEmployeeById(Employee, { id })
 
     // if employee doesn't exists
     if (!employee) {
-        return sendSuccessRequestForNoDataResponse(res, {
+        return sendResponse.badRequest(res, {
             message: EMPLOYEE_LIST_RESPONSE_LABEL.NO_EMPLOYEE_FOUND,
             data: id
         })
     }
 
-    const result = await updateEmployeeData(employee, {
+    const result = await updateEmployee(employee, {
         firstName,
         lastName
     })
 
-    return sendSuccessRequestResponse(res, {
+    return sendResponse.success(res, {
         message: SUCCESS_RESPONSE_MESSAGE,
         data: result
     })
@@ -120,28 +95,21 @@ export const updateEmployee = async (req: IRequest, res: IResponse) => {
  * @param res response instance to be sent
  * @returns delete the existing employee data using its id & sends back response
  */
-export const deleteEmployee = async (req: IRequest, res: IResponse) => {
-    const id: string | undefined = req?.body?.id
+export const deleteEmployeeController = async (req: IRequest, res: IResponse) => {
+    const id: string = req?.params?.id
 
-    // if id param is not there
-    if (!id) {
-        return sendBadRequestResponse(res, {
-            message: EMPLOYEE_LIST_RESPONSE_LABEL.ID_MISSING
-        })
-    }
-
-    const employee = await findEmployeeById(id)
+    const employee = await getEmployeeById(Employee, { id } )
 
     // if employee doesn't exists
     if (!employee) {
-        return sendSuccessRequestForNoDataResponse(res, {
+        return sendResponse.badRequest(res, {
             message: EMPLOYEE_LIST_RESPONSE_LABEL.NO_EMPLOYEE_FOUND,
             data: id
         })
     }
-    const result = await deleteEmployeeEntry(employee); //{ _id: req.body.id }
+    const result = await deleteEmployee(employee); //{ _id: req.body.id }
 
-    return sendSuccessRequestResponse(res, {
+    return sendResponse.success(res, {
         message: SUCCESS_RESPONSE_MESSAGE,
         data: result
     })
@@ -154,27 +122,20 @@ export const deleteEmployee = async (req: IRequest, res: IResponse) => {
  * @param res response instance to be sent
  * @returns finds the existing employee data using its id & sends back response
  */
-export const getEmployee = async (req: IRequest, res: IResponse) => {
-    const id: string | undefined = req?.body?.id
+export const getEmployeeController = async (req: IRequest, res: IResponse) => {
+    const id: string = req?.params?.id
 
-    // if id param is not there
-    if (!id) {
-        return sendBadRequestResponse(res, {
-            message: EMPLOYEE_LIST_RESPONSE_LABEL.ID_MISSING
-        })
-    }
-
-    const employee = await findEmployeeById(id)
+    const employee = await getEmployeeById(Employee, { id })
 
     // if employee doesn't exists
     if (!employee) {
-        return sendSuccessRequestForNoDataResponse(res, {
+        return sendResponse.badRequest(res, {
             message: EMPLOYEE_LIST_RESPONSE_LABEL.NO_EMPLOYEE_FOUND,
             data: id
         })
     }
 
-    return sendSuccessRequestResponse(res, {
+    return sendResponse.success(res, {
         message: SUCCESS_RESPONSE_MESSAGE,
         data: employee
     })

@@ -1,17 +1,13 @@
 import {
-    createNewTaskEntry,
-    getAllTasksList
+    createTask,
+    getTasksList
 } from '@use-cases/task-use-cases';
-import {
-    sendBadRequestResponse,
-    sendNewItemCreatedRequestResponse,
-    sendSuccessRequestForNoDataResponse,
-    sendSuccessRequestResponse
-} from '@services/response-transmitter';
+import { sendResponse } from '@services/response-transmitter';
 import {
     SUCCESS_RESPONSE_MESSAGE,
     TASK_LIST_RESPONSE_LABEL
 } from '@common/strings';
+import Task from "@model/task-model";
 
 
 
@@ -21,18 +17,10 @@ import {
  * @param res response instance to be sent
  * @returns response back all tasks list
  */
-export const getAllTasks = async (_req: IRequest, res: IResponse) => {
-    const taskList = await getAllTasksList()
+export const taskListController = async (_req: IRequest, res: IResponse) => {
+    const taskList = await getTasksList(Task)
 
-    // if tasks list is empty
-    if (!taskList.length) {
-        return sendSuccessRequestForNoDataResponse(res, {
-            message: TASK_LIST_RESPONSE_LABEL.NO_TASK,
-            data: []
-        })
-    }
-
-    sendSuccessRequestResponse(res, {
+    sendResponse.success(res, {
         message: SUCCESS_RESPONSE_MESSAGE,
         data: taskList
     })
@@ -46,25 +34,18 @@ export const getAllTasks = async (_req: IRequest, res: IResponse) => {
  * @param res response instance to be sent
  * @returns create new task entry & response back to the client
  */
-export const createNewTask = async (req: IRequest, res: IResponse) => {
-    const task: string | undefined = req?.body?.task
-
-    // if params are not proper -> return
-    if (!task) {
-        return sendBadRequestResponse(res, {
-            message: TASK_LIST_RESPONSE_LABEL.TASK_REQUIRED
-        })
-    }
+export const createTaskController = async (req: IRequest, res: IResponse) => {
+    const task: string = req?.body?.task
 
     try {
-        const result = await createNewTaskEntry(task)
-        sendNewItemCreatedRequestResponse(res, {
+        const result = await createTask(Task, { task })
+        sendResponse.createdRequest(res, {
             message: SUCCESS_RESPONSE_MESSAGE,
             data: result
         })
 
     } catch (err) {
-        return sendBadRequestResponse(res, {
+        return sendResponse.serverError(res, {
             message: err
         })
     }

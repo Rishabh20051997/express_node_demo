@@ -11,3 +11,5 @@ const taskSchema = new Schema<ITaskSchema>({
 
 const taskModelSchema = mongoose.model('Task', taskSchema);
 export default taskModelSchema
+
+export type TaskModalSchema = typeof taskModelSchema

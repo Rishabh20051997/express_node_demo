@@ -115,3 +115,66 @@ export {
     sendSuccessRequestForNoDataResponse,
     sendAccessDeniedRequestResponse
 }
+
+
+
+
+
+// import { STATUS_CODE } from "@constant";
+
+const sendResponseTemplate = (primaryCode: number, secondaryCode = primaryCode ) => (res: IResponse, {
+    message = '',
+    data = ''
+} : {
+    message?:string,
+    data?:any
+}) => {
+    res.status(primaryCode).json({
+        status: secondaryCode,
+        message: message,
+        data: data
+    });
+    
+}
+
+// const sendPlainResponseCode = (res: IResponse, {
+//     code
+// } : {
+//     code: number
+// }) => {
+//     res.sendStatus(code)
+// }
+
+// const sendLoginRequestResponse = (res: IResponse, {
+//     user,
+//     accessToken,
+//     refreshToken
+// }: {
+//     user: IUserResponseObject
+//     accessToken: string
+//     refreshToken:  string
+// }) => {
+//     res.status(STATUS_CODE.SUCCESS).json({
+//         user,
+//         accessToken,
+//         refreshToken
+//     });
+// }
+
+
+const sendResponse = {
+    success: sendResponseTemplate(STATUS_CODE.SUCCESS),
+    badRequest: sendResponseTemplate(STATUS_CODE.BAD_REQUEST),
+    conflictRequest: sendResponseTemplate(STATUS_CODE.CONFLICTS),
+    createdRequest: sendResponseTemplate(STATUS_CODE.CREATED),
+    serverError: sendResponseTemplate(STATUS_CODE.SERVER_ERROR),
+    accessDenied: sendResponseTemplate(STATUS_CODE.ACCESS_DENIED),
+    logOut: sendResponseTemplate(STATUS_CODE.LOGOUT),
+    plainCode: sendPlainResponseCode,
+}
+
+
+export {
+    // sendLoginRequestResponse,
+    sendResponse
+}

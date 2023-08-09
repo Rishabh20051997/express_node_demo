@@ -8,30 +8,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteEmployeeEntry = exports.createNewEmployeeEntry = exports.getAllEmployeesList = exports.updateEmployeeData = exports.findEmployeeById = void 0;
-const employee_model_1 = __importDefault(require("@model/employee-model"));
-const getAllEmployeesList = () => __awaiter(void 0, void 0, void 0, function* () {
-    const list = yield employee_model_1.default.find();
+exports.deleteEmployee = exports.createEmployee = exports.getEmployeesList = exports.updateEmployee = exports.getEmployeeById = void 0;
+const getEmployeesList = (Employee) => __awaiter(void 0, void 0, void 0, function* () {
+    const list = yield Employee.find();
     return list || [];
 });
-exports.getAllEmployeesList = getAllEmployeesList;
-const createNewEmployeeEntry = ({ firstName, lastName }) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield employee_model_1.default.create({
+exports.getEmployeesList = getEmployeesList;
+const createEmployee = (Employee, { firstName, lastName }) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield Employee.create({
         firstname: firstName,
         lastname: lastName
     });
     return result;
 });
-exports.createNewEmployeeEntry = createNewEmployeeEntry;
-const findEmployeeById = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield employee_model_1.default.findOne({ _id: id }).exec();
+exports.createEmployee = createEmployee;
+const getEmployeeById = (Employee, { id }) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield Employee.findOne({ _id: id }).exec();
 });
-exports.findEmployeeById = findEmployeeById;
-const updateEmployeeData = (employeeInstance, { firstName = '', lastName = '' }) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getEmployeeById = getEmployeeById;
+const updateEmployee = (employeeInstance, { firstName = '', lastName = '' }) => __awaiter(void 0, void 0, void 0, function* () {
     if (firstName) {
         employeeInstance.firstname = lastName;
     }
@@ -40,9 +36,9 @@ const updateEmployeeData = (employeeInstance, { firstName = '', lastName = '' })
     }
     return yield employeeInstance.save();
 });
-exports.updateEmployeeData = updateEmployeeData;
-const deleteEmployeeEntry = (employeeInstance) => __awaiter(void 0, void 0, void 0, function* () {
+exports.updateEmployee = updateEmployee;
+const deleteEmployee = (employeeInstance) => __awaiter(void 0, void 0, void 0, function* () {
     return yield employeeInstance.deleteOne();
 });
-exports.deleteEmployeeEntry = deleteEmployeeEntry;
+exports.deleteEmployee = deleteEmployee;
 //# sourceMappingURL=employee-use-cases.js.map

@@ -23,4 +23,8 @@ const userSchema = new Schema<IUserSchema>({
     refreshToken: String
 });
 
-export default mongoose.model('User', userSchema);
+const userModelSchema = mongoose.model('User', userSchema);
+
+export default userModelSchema
+
+export type UserModalSchema = typeof userModelSchema

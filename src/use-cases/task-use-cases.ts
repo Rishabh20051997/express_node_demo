@@ -1,12 +1,12 @@
 
-import Task from "@model/task-model";
 
-const getAllTasksList = async (): Promise<ITaskModelDocType[]> => {
+
+const getTasksList = async (Task: TaskModalSchema): Promise<ITaskModelDocType[]> => {
     const list = await Task.find();
     return list || []
 }
 
-const createNewTaskEntry = async (task: string): Promise<ITaskModelDocType> => {
+const createTask = async (Task: TaskModalSchema, {task} : { task: string }): Promise<ITaskModelDocType> => {
     const result = await Task.create({
         task
     })
@@ -14,6 +14,6 @@ const createNewTaskEntry = async (task: string): Promise<ITaskModelDocType> => {
 }
 
 export {
-    createNewTaskEntry,
-    getAllTasksList
+    createTask,
+    getTasksList
 }

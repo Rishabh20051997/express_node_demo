@@ -2,12 +2,13 @@
 
 import { Router } from 'express'
 
-import { getAllTasks, createNewTask } from '@controllers/api/task-controller'
+import { taskListController, createTaskController } from '@controllers/api/task-controller'
+import { taskCreateValidator } from '@serializers/validators/task-validator';
 
 const taskRouter = Router();
 
 taskRouter.route('/')
-    .get(getAllTasks)
-    .post(createNewTask)
+    .get(taskListController)
+    .post(taskCreateValidator, createTaskController)
 
 export default taskRouter

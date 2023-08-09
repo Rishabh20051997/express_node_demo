@@ -6,12 +6,12 @@ const response_transmitter_1 = require("@services/response-transmitter");
 const verifyRoles = (...allowedRoles) => {
     return (req, res, next) => {
         if (!(req === null || req === void 0 ? void 0 : req.roles)) {
-            return (0, response_transmitter_1.sendAccessDeniedRequestResponse)(res);
+            return response_transmitter_1.sendResponse.accessDenied(res, {});
         }
         const rolesArray = [...allowedRoles];
         const result = req.roles.map(role => rolesArray.includes(role)).find(val => val === true);
         if (!result) {
-            return (0, response_transmitter_1.sendAccessDeniedRequestResponse)(res);
+            return response_transmitter_1.sendResponse.accessDenied(res, {});
         }
         next();
     };

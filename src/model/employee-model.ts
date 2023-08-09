@@ -18,3 +18,5 @@ const employeeModelSchema = mongoose.model('Employee', employeeSchema);
 // type employeeModelType = InferSchemaType<typeof employeeSchema>;
 
 export default employeeModelSchema
+
+export type EmployeeModalSchema = typeof employeeModelSchema
