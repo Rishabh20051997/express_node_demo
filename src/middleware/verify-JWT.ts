@@ -22,7 +22,7 @@ export const verifyJWT = async (req, res, next) => {
     // has error in verificcation
     if (err) return sendResponse.plainCode(res, {
         code: STATUS_CODE.UN_AUTHORIZED
-    }); //invalid token
+    }); // invalid token
 
     req.user = decoded?.UserInfo?.username;
     req.roles = decoded?.UserInfo?.roles;

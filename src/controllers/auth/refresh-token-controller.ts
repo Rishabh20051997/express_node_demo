@@ -23,7 +23,7 @@ export const refreshTokenController = async (req: IRequest, res: IResponse) => {
 
      // no user found with refresh token -> refresh token - tempered 
     if (!foundUser) {
-        //Forbidden 
+        // Forbidden 
         return sendResponse.logOut(res, { message: LOGOUT_STRINGS.NO_USER_FOUND });
     }
 

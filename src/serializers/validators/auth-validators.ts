@@ -1,4 +1,4 @@
-import { body, checkSchema } from "express-validator";
+import { body } from "express-validator";
 import { errorValidator } from "./validators";
 import { USER_TYPES } from "@constant";
 import { getUserByUserName } from "@use-cases/user-use-cases";
